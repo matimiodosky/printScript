@@ -1,0 +1,9 @@
+# Project exclude paths
+/.gradle/
+/cli/build/
+/cli/build/classes/java/main/
+/lexer/build/
+/lexer/build/classes/java/main/
+/lexer/build/classes/java/test/
+/token/build/
+/token/build/classes/java/main/
