@@ -27,7 +27,8 @@ public enum TokenType {
     IMPORT("import"),
     PRINT("print"),
     IDENTIFIER("[_a-zA-Z][_a-zA-Z0-9]{0,30}"),
-    WHITESPACE("[ \t\f\r\n]+"),
+    WHITESPACE("[ \t\f\r]+"),
+    NEWLINE("\n"),
     INVALIDTOKEN(".+" );
 
     public final String pattern;

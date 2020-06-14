@@ -20,7 +20,7 @@ public class LexerTest {
 
     @Test
     public void test002AllTokensAreIdentified() {
-        String input = "let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print";
+        String input = "let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n";
 
         // Create tokens and print them
         var tokens = new LexerImpl().lex(input);
@@ -51,6 +51,31 @@ public class LexerTest {
     public void test003SyntaxError(){
         String input = "\"hola";
         new LexerImpl().lex(input);
+    }
+
+    @Test
+    public void test004SyntaxErrorAtSecondLine(){
+        String input = "\n\"hola";
+        int line = -1;
+        try {
+            new LexerImpl().lex(input);
+        }catch (SyntaxError error){
+            line = error.getLine();
+        }
+
+        assertEquals(1, line);
+    }
+    @Test
+    public void test004SyntaxErrorAtThirdLine(){
+        String input = "\n\n\"hola";
+        int line = -1;
+        try {
+            new LexerImpl().lex(input);
+        }catch (SyntaxError error){
+            line = error.getLine();
+        }
+
+        assertEquals(2, line);
     }
 
 

@@ -5,30 +5,38 @@ import com.austral.ingsis.TokenType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.regex.Pattern;
+import java.util.Optional;
 import java.util.regex.Matcher;
-import java.util.stream.Collector;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class LexerImpl {
 
+    private int currentLine = 0;
+
+    private Token checkNewLine(Token token){
+        if (token.type == TokenType.NEWLINE) this.currentLine++;
+        return token;
+    }
+
     public ArrayList<Token> lex(String input) {
-        // The tokens to return
         ArrayList<Token> tokens = new ArrayList<>();
-
         Matcher matcher = getMatcher(input);
-
         while (matcher.find()) {
-            tokens.add(Arrays.stream(TokenType
-                    .values())
-                    .filter(tokenType -> matcher.group(tokenType.name()) != null)
-                    .findAny()
-                    .filter(tokenType -> tokenType != TokenType.INVALIDTOKEN)
-                    .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name())))
-                    .orElseThrow(SyntaxError::new));
+            tokens.add(
+                    Arrays.stream(TokenType.values())
+                            .filter(tokenType -> matcher.group(tokenType.name()) != null)
+                            .findAny()
+                            .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name())))
+                            .map(this::checkNewLine)
+                            .flatMap(this::checkError)
+                            .orElseThrow(() -> new SyntaxError(this.currentLine)));
         }
         return tokens;
+    }
+
+    private Optional<Token> checkError(Token token) {
+       return token.type == TokenType.INVALIDTOKEN ? Optional.empty() : Optional.of(token);
     }
 
     private Matcher getMatcher(String input) {
