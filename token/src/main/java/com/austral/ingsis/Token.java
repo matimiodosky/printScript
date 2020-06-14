@@ -1,15 +1,17 @@
 package com.austral.ingsis;
 
-import lombok.Builder;
-import lombok.Data;
+public class Token {
 
-@Data
-@Builder
-public class Token <T>{
-    private final TokenType type;
-    private final String lexeme;
-    final T literal;
-    final int line;
+    public TokenType type;
+    public String data;
 
+    public Token(TokenType type, String data) {
+        this.type = type;
+        this.data = data;
+    }
 
+    @Override
+    public String toString() {
+        return String.format("(%s %s)", type.name(), data);
+    }
 }

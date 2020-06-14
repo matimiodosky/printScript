@@ -1,48 +1,43 @@
 package com.austral.ingsis.impl;
 
-
-import com.austral.ingsis.Lexer;
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static com.austral.ingsis.impl.Matcher.matchType;
+public class LexerImpl {
 
+    public ArrayList<Token> lex(String input) {
+        // The tokens to return
+        ArrayList<Token> tokens = new ArrayList<>();
 
-public class LexerImpl implements Lexer {
+        Matcher matcher = getMatcher(input);
 
-    @Override
-    public Stream<Token<?>> scan(Stream<Character> source) {
-
-        List<Character> input = source.collect(Collectors.toList());
-        List<Token<?>> outPut = new ArrayList<>();
-
-        var i = 0;
-        var acc = "";
-        var line = 0;
-
-        while (i < input.size()) {
-            acc = acc.concat(input.get(i) + "");
-            Optional<TokenType> tokenType = matchType(acc);
-            if (tokenType.isPresent()) {
-                outPut.add(
-                        Token
-                                .builder()
-                                .line(line)
-                                .type(tokenType.get())
-                                .lexeme(acc)
-                                .build()
-                );
-                acc = "";
-            }
-            i++;
+        while (matcher.find()) {
+            tokens.add(Arrays.stream(TokenType
+                    .values())
+                    .filter(tokenType -> matcher.group(tokenType.name()) != null)
+                    .findAny()
+                    .filter(tokenType -> tokenType != TokenType.INVALIDTOKEN)
+                    .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name())))
+                    .orElseThrow(SyntaxError::new));
         }
-        return outPut.stream();
+        return tokens;
     }
 
+    private Matcher getMatcher(String input) {
+        // Lexer logic begins here
+        String tokenPatternsBuffer = Arrays.stream(TokenType.values())
+                        .map(tokenType -> String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern))
+                        .collect(Collectors.joining());
+
+        Pattern tokenPatterns = Pattern.compile(tokenPatternsBuffer.substring(1));
+        return tokenPatterns.matcher(input);
+    }
 }
