@@ -94,5 +94,20 @@ public class LexerTest {
         assertEquals(2, line);
     }
 
+    @Test
+    public void test006SyntaxErrorAtIndex() {
+        int index = -1;
+        Stream<Character> input = "let let let \"hola"
+                .chars()
+                .mapToObj(i -> (char) i);
+        Lexer lexer = new LexerImpl();
+        try {
+            lexer.scan(input);
+        } catch (SyntaxError error) {
+            index = error.getIndex();
+        }
+        assertEquals(17, index);
+    }
+
 
 }

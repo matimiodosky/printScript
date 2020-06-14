@@ -16,12 +16,8 @@ import java.util.stream.Stream;
 public class LexerImpl implements Lexer {
 
     private int currentLine = 0;
-    private TokenPatternProvider tokenPatternProvider = new TokenPatternProvider();
-
-    private Token checkNewLine(Token token) {
-        if (token.type == TokenType.NEWLINE) this.currentLine++;
-        return token;
-    }
+    private int currentIndex = 0;
+    private final TokenPatternProvider tokenPatternProvider = new TokenPatternProvider();
 
     public Stream<Token> scan(Stream<Character> characterStream) {
         ArrayList<Token> tokens = new ArrayList<>();
@@ -32,15 +28,29 @@ public class LexerImpl implements Lexer {
                             .filter(tokenType -> matcher.group(tokenType.name()) != null)
                             .findAny()
                             .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name())))
+                            .map(this::advanceCurrentIndex)
                             .map(this::checkNewLine)
                             .flatMap(this::checkError)
-                            .orElseThrow(() -> new SyntaxError(this.currentLine)));
+                            .orElseThrow(() -> new SyntaxError(this.currentLine, this.currentIndex)));
         }
         return tokens.stream();
     }
 
+    private Token advanceCurrentIndex(Token token) {
+        this.currentIndex += token.data.length();
+        return token;
+    }
+
     private Optional<Token> checkError(Token token) {
         return token.type == TokenType.INVALIDTOKEN ? Optional.empty() : Optional.of(token);
+    }
+
+    private Token checkNewLine(Token token) {
+        if (token.type == TokenType.NEWLINE) {
+            this.currentLine++;
+            this.currentIndex = 0;
+        }
+        return token;
     }
 
     private Matcher getMatcher(Stream<Character> input) {
