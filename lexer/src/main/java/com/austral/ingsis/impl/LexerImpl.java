@@ -32,12 +32,10 @@ public class LexerImpl {
     }
 
     private Matcher getMatcher(String input) {
-        // Lexer logic begins here
-        String tokenPatternsBuffer = Arrays.stream(TokenType.values())
-                        .map(tokenType -> String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern))
-                        .collect(Collectors.joining());
-
-        Pattern tokenPatterns = Pattern.compile(tokenPatternsBuffer.substring(1));
-        return tokenPatterns.matcher(input);
+        return Pattern.compile(Arrays.stream(TokenType.values())
+                .map(tokenType -> String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern))
+                .collect(Collectors.joining())
+                .substring(1)
+        ).matcher(input);
     }
 }
