@@ -47,6 +47,7 @@ public class LexerTest {
                         1,
                         tokens
                                 .filter(token -> token.type.equals(tokenType))
+                                .peek(System.out::println)
                                 .count()
                 );
         }

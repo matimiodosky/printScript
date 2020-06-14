@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 public class LexerImpl implements Lexer {
 
     private int currentLine = 0;
+    private TokenPatternProvider tokenPatternProvider = new TokenPatternProvider();
 
     private Token checkNewLine(Token token) {
         if (token.type == TokenType.NEWLINE) this.currentLine++;
@@ -43,10 +44,11 @@ public class LexerImpl implements Lexer {
     }
 
     private Matcher getMatcher(Stream<Character> input) {
-        return Pattern.compile(Arrays.stream(TokenType.values())
-                .map(tokenType -> String.format("|(?<%s>%s)", tokenType.name(), tokenType.pattern))
-                .collect(Collectors.joining())
-                .substring(1)
+        return Pattern.compile(
+                Arrays.stream(TokenType.values())
+                        .map(tokenType -> String.format("|(?<%s>%s)", tokenType.name(), tokenPatternProvider.get(tokenType)))
+                        .collect(Collectors.joining())
+                        .substring(1)
         ).matcher(input
                 .map(Objects::toString)
                 .collect(Collectors.joining())
