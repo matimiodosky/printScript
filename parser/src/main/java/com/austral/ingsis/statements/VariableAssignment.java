@@ -1,7 +1,8 @@
 package com.austral.ingsis.statements;
 
 
-import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.Expression;
+import com.austral.ingsis.Statement;
 
 /**
  * (const | let) (identifier) (equals) (literal | number | expression) (semicolon)

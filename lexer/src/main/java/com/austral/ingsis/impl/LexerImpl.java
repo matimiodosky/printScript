@@ -27,7 +27,7 @@ public class LexerImpl implements Lexer {
                     Arrays.stream(TokenType.values())
                             .filter(tokenType -> matcher.group(tokenType.name()) != null)
                             .findAny()
-                            .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name())))
+                            .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name()), this.currentLine, this.currentIndex))
                             .map(this::advanceCurrentIndex)
                             .map(this::checkNewLine)
                             .flatMap(this::checkError)
@@ -37,16 +37,16 @@ public class LexerImpl implements Lexer {
     }
 
     private Token advanceCurrentIndex(Token token) {
-        this.currentIndex += token.data.length();
+        this.currentIndex += token.getData().length();
         return token;
     }
 
     private Optional<Token> checkError(Token token) {
-        return token.type == TokenType.INVALIDTOKEN ? Optional.empty() : Optional.of(token);
+        return token.getType() == TokenType.INVALIDTOKEN ? Optional.empty() : Optional.of(token);
     }
 
     private Token checkNewLine(Token token) {
-        if (token.type == TokenType.NEWLINE) {
+        if (token.getType() == TokenType.NEWLINE) {
             this.currentLine++;
             this.currentIndex = 0;
         }

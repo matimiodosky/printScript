@@ -1,7 +1,7 @@
 package com.austral.ingsis.matchers.statement;
 
 import com.austral.ingsis.*;
-import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.Expression;
 import com.austral.ingsis.matchers.StatementMatcher;
 import com.austral.ingsis.statements.VariableDefinition;
 
@@ -30,24 +30,24 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
 
         Optional<Token> keyWord = Optional
                 .of(usefulTokens.get(0))
-                .filter(token -> token.type == TokenType.LET || token.type == TokenType.CONST);
+                .filter(token -> token.getType() == TokenType.LET || token.getType() == TokenType.CONST);
 
         Optional<Token> identifier = Optional
                 .of(usefulTokens.get(1))
-                .filter(token -> token.type == TokenType.IDENTIFIER);
+                .filter(token -> token.getType() == TokenType.IDENTIFIER);
 
         Optional<Token> equals = Optional
                 .of(usefulTokens.get(2))
-                .filter(token -> token.type == TokenType.ASSIGNATION);
+                .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+        Expression expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(4))
-                .filter(token -> token.type == TokenType.SEMICOLON);
+                .filter(token -> token.getType() == TokenType.SEMICOLON);
 
-        if (keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && expression.isPresent() && semicolon.isPresent()) {
-            return Optional.of(new VariableDefinition<>(identifier.get().data, keyWord.get().type == TokenType.CONST, expression.get()));
+        if (keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
+            return Optional.of(new VariableDefinition<>(identifier.get().getData(), keyWord.get().getType() == TokenType.CONST, expression));
         } else return Optional.empty();
 
     }

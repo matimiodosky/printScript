@@ -11,14 +11,14 @@ public abstract class Matcher<T> {
     public abstract Optional<T> match(Stream<Token> tokens);
 
     protected boolean usefulToken(Token token) {
-        return token.type != TokenType.WHITESPACE &&
-                token.type != TokenType.NEWLINE;
+        return token.getType() != TokenType.WHITESPACE &&
+                token.getType() != TokenType.NEWLINE;
     }
 
     protected Optional<Number> asNumber(Token token) {
-        if (token.type == TokenType.NUMBER) {
+        if (token.getType() == TokenType.NUMBER) {
             try {
-                return Optional.of(Double.parseDouble(token.data));
+                return Optional.of(Double.parseDouble(token.getData()));
             } catch (NumberFormatException e) {
                 return Optional.empty();
             }

@@ -1,7 +1,7 @@
 package com.austral.ingsis.matchers.statement;
 
 import com.austral.ingsis.*;
-import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.Expression;
 import com.austral.ingsis.matchers.StatementMatcher;
 import com.austral.ingsis.statements.VariableAssignment;
 
@@ -26,20 +26,20 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
 
         Optional<Token> identifier = Optional
                 .of(usefulTokens.get(0))
-                .filter(token -> token.type == TokenType.IDENTIFIER);
+                .filter(token -> token.getType() == TokenType.IDENTIFIER);
 
         Optional<Token> equals = Optional
                 .of(usefulTokens.get(1))
-                .filter(token -> token.type == TokenType.ASSIGNATION);
+                .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 2));
+        Expression expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(3))
-                .filter(token -> token.type == TokenType.SEMICOLON);
+                .filter(token -> token.getType() == TokenType.SEMICOLON);
 
-        if (identifier.isPresent() && equals.isPresent() && expression.isPresent() && semicolon.isPresent()) {
-           return Optional.of(new VariableAssignment(identifier.get().data, expression.get()));
+        if (identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
+           return Optional.of(new VariableAssignment(identifier.get().getData(), expression));
         } else return Optional.empty();
 
     }

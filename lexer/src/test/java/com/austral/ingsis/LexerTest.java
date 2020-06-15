@@ -27,7 +27,7 @@ public class LexerTest {
             if (tokenType != TokenType.WHITESPACE && tokenType != TokenType.INVALIDTOKEN)
                 assertTrue(
                         String.format("Token not found: %s", tokenType),
-                        tokens.anyMatch(token -> token.type.equals(tokenType))
+                        tokens.anyMatch(token -> token.getType().equals(tokenType))
                 );
         }
 
@@ -46,7 +46,7 @@ public class LexerTest {
                         String.format("Token found more than once: %s", tokenType),
                         1,
                         tokens
-                                .filter(token -> token.type.equals(tokenType))
+                                .filter(token -> token.getType().equals(tokenType))
                                 .peek(System.out::println)
                                 .count()
                 );

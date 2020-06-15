@@ -1,11 +1,8 @@
 package com.austral.ingsis.statements;
 
 
-import com.austral.ingsis.Token;
-import com.austral.ingsis.expression.Expression;
-
-import java.util.List;
-import java.util.stream.Stream;
+import com.austral.ingsis.Statement;
+import com.austral.ingsis.Expression;
 
 /**
  * (const | let) (identifier) (equals) (literal | number | expression) (semicolon)
