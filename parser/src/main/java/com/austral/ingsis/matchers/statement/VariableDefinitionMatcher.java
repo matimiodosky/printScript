@@ -27,6 +27,7 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
                 .collect(Collectors.toList());
 
         if (usefulTokens.size() < 5)return Optional.empty();
+
         Optional<Token> keyWord = Optional
                 .of(usefulTokens.get(0))
                 .filter(token -> token.type == TokenType.LET || token.type == TokenType.CONST);
