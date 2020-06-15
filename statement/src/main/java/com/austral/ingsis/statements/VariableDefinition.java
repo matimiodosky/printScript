@@ -11,9 +11,9 @@ public class VariableDefinition extends Statement {
 
     String identifier;
     Boolean isConstant;
-    Expression value;
+    Expression<?> value;
 
-    public VariableDefinition(String identifier, Boolean isConstant, Expression value) {
+    public VariableDefinition(String identifier, Boolean isConstant, Expression<?> value) {
         this.identifier = identifier;
         this.isConstant = isConstant;
         this.value = value;
@@ -27,7 +27,7 @@ public class VariableDefinition extends Statement {
         return isConstant;
     }
 
-    public Expression getValue() {
+    public Expression<?> getValue() {
         return value;
     }
 }
