@@ -1,13 +1,16 @@
-package com.austral.ingsis.parsers;
+package com.austral.ingsis.matchers;
 
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
-public abstract class Matcher {
+public abstract class Matcher<T> {
 
-    public boolean usefulToken(Token token) {
+    public abstract Optional<T> match(Stream<Token> tokens);
+
+    protected boolean usefulToken(Token token) {
         return token.type != TokenType.WHITESPACE &&
                 token.type != TokenType.NEWLINE;
     }

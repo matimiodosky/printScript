@@ -1,12 +1,11 @@
 package com.austral.ingsis;
 
 import com.austral.ingsis.expression.Expression;
-import com.austral.ingsis.expression.LiteralNumber;
-import com.austral.ingsis.parsers.expression.ExpressionMatcher;
-import com.austral.ingsis.parsers.expression.LiteralNumberMatcher;
-import com.austral.ingsis.parsers.statement.VariableAssignmentMatcher;
-import com.austral.ingsis.parsers.statement.VariableDefinitionMatcher;
-import com.austral.ingsis.parsers.statement.StatementMatcher;
+import com.austral.ingsis.matchers.ExpressionMatcher;
+import com.austral.ingsis.matchers.expression.LiteralNumberMatcher;
+import com.austral.ingsis.matchers.statement.VariableAssignmentMatcher;
+import com.austral.ingsis.matchers.statement.VariableDefinitionMatcher;
+import com.austral.ingsis.matchers.StatementMatcher;
 import com.austral.ingsis.statements.Statement;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             new VariableAssignmentMatcher(this)
     );
 
-    private final List<ExpressionMatcher<?>> expressionParsers = Arrays.asList(
+    private final List<ExpressionMatcher<? extends Expression>> expressionParsers = Arrays.asList(
             new LiteralNumberMatcher()
     );
 
@@ -46,7 +45,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
     }
 
     @Override
-    public Optional<Expression> parseExpression(List<Token> tokens) {
+    public Optional<? extends Expression> parseExpression(List<Token> tokens) {
         return expressionParsers
                 .stream()
                 .map(matcher -> matcher.match(tokens.stream()))
@@ -71,6 +70,5 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
         return statements.stream();
     }
-
 
 }

@@ -1,11 +1,10 @@
-package com.austral.ingsis.parsers.statement;
+package com.austral.ingsis.matchers.statement;
 
 import com.austral.ingsis.*;
 import com.austral.ingsis.expression.Expression;
-import com.austral.ingsis.statements.VariableAssignment;
+import com.austral.ingsis.matchers.StatementMatcher;
 import com.austral.ingsis.statements.VariableDefinition;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,13 +30,16 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
         Optional<Token> keyWord = Optional
                 .of(usefulTokens.get(0))
                 .filter(token -> token.type == TokenType.LET || token.type == TokenType.CONST);
+
         Optional<Token> identifier = Optional
                 .of(usefulTokens.get(1))
                 .filter(token -> token.type == TokenType.IDENTIFIER);
+
         Optional<Token> equals = Optional
                 .of(usefulTokens.get(2))
                 .filter(token -> token.type == TokenType.ASSIGNATION);
-        Optional<Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+
+        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(4))

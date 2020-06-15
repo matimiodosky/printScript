@@ -1,7 +1,8 @@
-package com.austral.ingsis.parsers.statement;
+package com.austral.ingsis.matchers.statement;
 
 import com.austral.ingsis.*;
 import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.matchers.StatementMatcher;
 import com.austral.ingsis.statements.VariableAssignment;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
                 .of(usefulTokens.get(1))
                 .filter(token -> token.type == TokenType.ASSIGNATION);
 
-        Optional<Expression> expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 2));
+        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 2));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(3))

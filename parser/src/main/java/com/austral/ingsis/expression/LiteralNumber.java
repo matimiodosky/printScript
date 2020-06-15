@@ -4,7 +4,6 @@ public class LiteralNumber extends Expression {
 
     private final Number value;
 
-
     public LiteralNumber(Number value) {
         this.value = value;
     }

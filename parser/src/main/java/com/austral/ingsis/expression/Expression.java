@@ -4,7 +4,7 @@ import com.austral.ingsis.Token;
 
 import java.util.List;
 
-public class Expression {
+public abstract class Expression {
 
 
 
