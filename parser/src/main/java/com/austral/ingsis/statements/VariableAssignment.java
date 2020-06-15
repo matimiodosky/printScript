@@ -1,20 +1,19 @@
 package com.austral.ingsis.statements;
 
 
-import com.austral.ingsis.Token;
-
-import java.util.List;
+import com.austral.ingsis.expression.Expression;
 
 /**
  * (const | let) (identifier) (equals) (literal | number | expression) (semicolon)
  */
-public class VariableAssignment<T> extends Statement {
+public class VariableAssignment extends Statement {
 
-    String identifier;
-    T value;
+    private final String identifier;
+    private final Expression value;
 
-    public VariableAssignment(List<Token> tokens, String identifier, T value) {
-        super(tokens);
+
+
+    public VariableAssignment(String identifier, Expression value) {
         this.identifier = identifier;
         this.value = value;
     }
@@ -23,7 +22,7 @@ public class VariableAssignment<T> extends Statement {
         return identifier;
     }
 
-    public T getValue() {
+    public Expression getValue() {
         return value;
     }
 }

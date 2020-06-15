@@ -1,8 +1,12 @@
 package com.austral.ingsis;
 
-import com.austral.ingsis.parsers.VariableAssignmentMatcher;
-import com.austral.ingsis.parsers.VariableDefinitionMatcher;
-import com.austral.ingsis.parsers.StatementMatcher;
+import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.expression.LiteralNumber;
+import com.austral.ingsis.parsers.expression.ExpressionMatcher;
+import com.austral.ingsis.parsers.expression.LiteralNumberMatcher;
+import com.austral.ingsis.parsers.statement.VariableAssignmentMatcher;
+import com.austral.ingsis.parsers.statement.VariableDefinitionMatcher;
+import com.austral.ingsis.parsers.statement.StatementMatcher;
 import com.austral.ingsis.statements.Statement;
 
 import java.util.ArrayList;
@@ -12,32 +16,46 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ParserImpl implements Parser {
+public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
-    private final List<StatementMatcher<?>> parsers = Arrays.asList(
-            new VariableDefinitionMatcher(),
-            new VariableAssignmentMatcher()
+    private final List<StatementMatcher<?>> statementMatchers = Arrays.asList(
+            new VariableDefinitionMatcher(this),
+            new VariableAssignmentMatcher(this)
+    );
+
+    private final List<ExpressionMatcher<?>> expressionParsers = Arrays.asList(
+            new LiteralNumberMatcher()
     );
 
     @Override
     public Stream<Statement> parse(Stream<Token> tokens) {
 
-        return splitIntoStatements(tokens)
-                .map(this::parseStatement);
+        return splitIntoStatements(tokens).map(this::parseStatement);
 
     }
 
-    private Statement parseStatement(Statement statement) {
-        return parsers
+    @Override
+    public Statement parseStatement(List<Token> tokens) {
+        return statementMatchers
                 .stream()
-                .map(matcher -> matcher.match(statement.getTokens().stream()))
+                .map(matcher -> matcher.match(tokens.stream()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findAny()
                 .orElseThrow(SyntaxError::new);
     }
 
-    private Stream<Statement> splitIntoStatements(Stream<Token> tokens) {
+    @Override
+    public Optional<Expression> parseExpression(List<Token> tokens) {
+        return expressionParsers
+                .stream()
+                .map(matcher -> matcher.match(tokens.stream()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findAny();
+    }
+
+    private Stream<List<Token>> splitIntoStatements(Stream<Token> tokens) {
         final List<List<Token>> statements = new ArrayList<>();
         List<Token> currentStatement = new ArrayList<>();
 
@@ -51,9 +69,7 @@ public class ParserImpl implements Parser {
 
         if (!currentStatement.isEmpty()) throw new SyntaxError();
 
-        return statements
-                .stream()
-                .map(Statement::new);
+        return statements.stream();
     }
 
 

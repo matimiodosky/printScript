@@ -1,9 +1,11 @@
-package com.austral.ingsis.parsers;
+package com.austral.ingsis.parsers.statement;
 
-import com.austral.ingsis.Token;
-import com.austral.ingsis.TokenType;
+import com.austral.ingsis.*;
+import com.austral.ingsis.expression.Expression;
+import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.statements.VariableDefinition;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -14,6 +16,10 @@ import java.util.stream.Stream;
  */
 public class VariableDefinitionMatcher extends StatementMatcher<VariableDefinition<?>> {
 
+
+    public VariableDefinitionMatcher(ExpressionParser parser) {
+        super(parser);
+    }
 
     @Override
     public Optional<VariableDefinition<?>> match(Stream<Token> tokens) {
@@ -31,34 +37,15 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
         Optional<Token> equals = Optional
                 .of(usefulTokens.get(2))
                 .filter(token -> token.type == TokenType.ASSIGNATION);
-        Optional<Token> literalValue = Optional
-                .of(usefulTokens.get(3))
-                .filter(token -> token.type == TokenType.LITERAL || token.type == TokenType.NUMBER);
+        Optional<Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(4))
                 .filter(token -> token.type == TokenType.SEMICOLON);
 
-        if (keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && literalValue.isPresent() && semicolon.isPresent()) {
-            if (asNumber(literalValue.get()).isPresent()) {
-                return Optional.of(
-                        new VariableDefinition<>(
-                                usefulTokens,
-                                identifier.get().data,
-                                identifier.get().type == TokenType.CONST,
-                                asNumber(literalValue.get()).get())
-                );
-            } else {
-                return Optional.of(
-                        new VariableDefinition<>(
-                                usefulTokens,
-                                identifier.get().data,
-                                identifier.get().type == TokenType.CONST,
-                                literalValue.get()
-                        )
-                );
-            }
+        if (keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && expression.isPresent() && semicolon.isPresent()) {
+            return Optional.of(new VariableDefinition<>(identifier.get().data, keyWord.get().type == TokenType.CONST, expression.get()));
         } else return Optional.empty();
 
     }
-
 }

@@ -33,41 +33,41 @@ public class ParserTest {
 
     }
 
-    @Test
-    public void tes001VariableAssignmentIsParsed() {
-
-        Stream<Token> tokenStream = Stream.of(
-                new Token(TokenType.WHITESPACE, " "),
-                new Token(TokenType.IDENTIFIER, "a"),
-                new Token(TokenType.ASSIGNATION, "="),
-                new Token(TokenType.NUMBER, "0"),
-                new Token(TokenType.SEMICOLON, ";")
-        );
-
-        Parser parser = new ParserImpl();
-        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
-        parse.forEach(System.out::println);
-        assertTrue(parse.get(0) instanceof VariableAssignment);
-
-    }
-
-    @Test
-    public void tes001VariableAssignmentWithLiteralValueIsParsed() {
-
-        Stream<Token> tokenStream = Stream.of(
-                new Token(TokenType.WHITESPACE, " "),
-                new Token(TokenType.IDENTIFIER, "a"),
-                new Token(TokenType.ASSIGNATION, "="),
-                new Token(TokenType.LITERAL, "\"a\""),
-                new Token(TokenType.SEMICOLON, ";")
-        );
-
-        Parser parser = new ParserImpl();
-        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
-        parse.forEach(System.out::println);
-        assertTrue(parse.get(0) instanceof VariableAssignment);
-        assertTrue(((VariableAssignment<?>) parse.get(0)).getValue() instanceof String);
-    }
+//    @Test
+//    public void tes001VariableAssignmentIsParsed() {
+//
+//        Stream<Token> tokenStream = Stream.of(
+//                new Token(TokenType.WHITESPACE, " "),
+//                new Token(TokenType.IDENTIFIER, "a"),
+//                new Token(TokenType.ASSIGNATION, "="),
+//                new Token(TokenType.NUMBER, "0"),
+//                new Token(TokenType.SEMICOLON, ";")
+//        );
+//
+//        Parser parser = new ParserImpl();
+//        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+//        parse.forEach(System.out::println);
+//        assertTrue(parse.get(0) instanceof VariableAssignment);
+//
+//    }
+//
+//    @Test
+//    public void tes001VariableAssignmentWithLiteralValueIsParsed() {
+//
+//        Stream<Token> tokenStream = Stream.of(
+//                new Token(TokenType.WHITESPACE, " "),
+//                new Token(TokenType.IDENTIFIER, "a"),
+//                new Token(TokenType.ASSIGNATION, "="),
+//                new Token(TokenType.LITERAL, "\"a\""),
+//                new Token(TokenType.SEMICOLON, ";")
+//        );
+//
+//        Parser parser = new ParserImpl();
+//        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+//        parse.forEach(System.out::println);
+//        assertTrue(parse.get(0) instanceof VariableAssignment);
+//        assertTrue(((VariableAssignment<?>) parse.get(0)).getValue() instanceof String);
+//    }
 
 
 }
