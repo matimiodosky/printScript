@@ -43,6 +43,14 @@ project(':statement') {
 
 }
 
+project(':interpreter') {
+    dependencies {
+        compile project(':statement')
+        testCompile project(':parser')
+        testCompile project(':lexer')
+    }
+}
+
 
 project(':lexer') {
     dependencies {

@@ -26,6 +26,7 @@ public class LiteralStringMatcher extends ExpressionMatcher<LiteralString> {
                 .findFirst()
                 .filter(token -> token.getType() == TokenType.LITERAL)
                 .map(Token::getData)
+                .map(data -> data.replace("\"", ""))
                 .map(LiteralString::new);
     }
 }
