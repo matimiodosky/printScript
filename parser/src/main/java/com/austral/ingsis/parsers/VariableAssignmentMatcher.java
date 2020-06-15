@@ -56,14 +56,4 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
 
     }
 
-    private Optional<Number> asNumber(Token token) {
-        if (token.type == TokenType.NUMBER) {
-            try {
-                return Optional.of(Double.parseDouble(token.data));
-            } catch (NumberFormatException e) {
-                return Optional.empty();
-            }
-        }
-        return Optional.empty();
-    }
 }
