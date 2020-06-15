@@ -49,5 +49,6 @@ project(':lexer') {
 project(':parser') {
     dependencies {
         compile project(':token')
+        testCompile project(':lexer')
     }
 }

@@ -19,7 +19,7 @@ public class TokenPatternProvider {
         patterns.put(TokenType.BOOLEANTYPE,"boolean");
         patterns.put(TokenType.NUMBERTYPE,"number");
         patterns.put(TokenType.STRINGTYPE,"string");
-        patterns.put(TokenType.LITERAL,"\"([_a-zA-Z][_a-zA-Z0-9])*\"");
+        patterns.put(TokenType.LITERAL,"\"([_a-zA-Z0-9])*\"");
         patterns.put(TokenType.SEMICOLON,";");
         patterns.put(TokenType.PLUS,"[+]");
         patterns.put(TokenType.MINUS,"[-]");

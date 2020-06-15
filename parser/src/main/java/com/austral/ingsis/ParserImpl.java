@@ -47,12 +47,12 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
     private SyntaxError statementError(List<Token> tokens) {
         Token lastToken = tokens.get(tokens.size() - 1);
-        return new SyntaxError(String.format("Invalid statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex() ), lastToken.getLine(), lastToken.getIndex());
+        return new SyntaxError(String.format("Invalid statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
     }
 
     private SyntaxError expressionError(List<Token> tokens) {
         Token lastToken = tokens.get(tokens.size() - 1);
-        return new SyntaxError(String.format("Invalid expression at: [%d, %d]", lastToken.getLine(), lastToken.getIndex() ), lastToken.getLine(), lastToken.getIndex());
+        return new SyntaxError(String.format("Invalid expression at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
     }
 
 
@@ -68,7 +68,6 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
     }
 
 
-
     private Stream<List<Token>> splitIntoStatements(Stream<Token> tokens) {
         final List<List<Token>> statements = new ArrayList<>();
         List<Token> currentStatement = new ArrayList<>();
@@ -81,9 +80,11 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             }
         }
 
-        if (!currentStatement.isEmpty()) {
+        if (!currentStatement
+                .stream()
+                .allMatch(x -> x.getType() == TokenType.WHITESPACE || x.getType() == TokenType.NEWLINE)
+        ) {
             Token lastToken = currentStatement.get(currentStatement.size() - 1);
-
             throw new SyntaxError(String.format("Unfinished statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
         }
 
