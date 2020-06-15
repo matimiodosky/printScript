@@ -3,10 +3,10 @@ package com.austral.ingsis;
 import com.austral.ingsis.exception.SyntaxError;
 import com.austral.ingsis.expression.LiteralString;
 import com.austral.ingsis.impl.LexerImpl;
-import com.austral.ingsis.statements.VariableAssignment;
-import com.austral.ingsis.statements.VariableDefinition;
+import com.austral.ingsis.statements.*;
 import org.junit.Test;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,7 +113,7 @@ public class ParserTest {
     }
 
     @Test
-    public void test005Variables() {
+    public void test005VariablesExample() {
         Lexer lexer = new LexerImpl();
 
         String code = """
@@ -134,9 +134,135 @@ public class ParserTest {
 
         Parser parser = new ParserImpl();
         List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+
+        assertTrue(parse.get(0) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(1) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(2) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(3) instanceof VariableExplicitDefinition);
+
+        assertTrue(parse.get(4) instanceof Print);
+        assertTrue(parse.get(5) instanceof Print);
+        assertTrue(parse.get(6) instanceof Print);
+
         System.out.println();
 
     }
 
+
+    @Test
+    public void test0006DeclareVaibalesWithSpacesExample(){
+        Lexer lexer = new LexerImpl();
+
+        // semi colons at the end of each statement is requerid for this istance of PrintScript
+        // String is not a type. string is.
+
+        String code = """
+                       let         a   :                          boolean         =          5 ;
+                       let    b
+                              :
+                                  string
+                          =      "adasdasdasdasdasdasd";
+                       
+                                             
+                """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+
+        assertTrue(parse.get(0) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(1) instanceof VariableExplicitDefinition);
+    }
+
+    @Test
+    public void test007VariableReassignExample(){
+        Lexer lexer = new LexerImpl();
+
+        // semi colons at the end of each statement is requerid for this istance of PrintScript
+        // String is not a type. string is.
+
+        String code = """
+                       let x: number = 5;
+                       let y: string = "AnotherThing";
+                       
+                       print(x);
+                       print(y);
+                       
+                       y = "SomethingElse";
+                       x = 18;
+                       print(x);
+                       print(y);
+                       
+                """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+
+        assertTrue(parse.get(0) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(1) instanceof VariableExplicitDefinition);
+        assertTrue(parse.get(2) instanceof Print);
+        assertTrue(parse.get(3) instanceof Print);
+        assertTrue(parse.get(4) instanceof VariableAssignment);
+        assertTrue(parse.get(5) instanceof VariableAssignment);
+        assertTrue(parse.get(6) instanceof Print);
+        assertTrue(parse.get(7) instanceof Print);
+    }
+
+    @Test
+    public void test0008VariableDeclarationWithNoValue(){
+        Lexer lexer = new LexerImpl();
+
+        // semi colons at the end of each statement is requerid for this istance of PrintScript
+        // String is not a type. string is.
+
+        String code = """
+                       let y: string;
+                       const x: number;
+                       let z: boolean;
+                       
+                       print(x);
+                       print(y);
+                       print(z);
+                """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
+
+        assertTrue(parse.get(0) instanceof VariableExplicitDefinitionWithNoValue);
+        assertTrue(parse.get(1) instanceof VariableExplicitDefinitionWithNoValue);
+        assertTrue(parse.get(2) instanceof VariableExplicitDefinitionWithNoValue);
+
+        assertTrue(parse.get(3) instanceof Print);
+        assertTrue(parse.get(4) instanceof Print);
+        assertTrue(parse.get(5) instanceof Print);
+    }
+
+    @Test(expected = com.austral.ingsis.impl.SyntaxError.class)
+    public void test0010SyntaxError(){
+        Lexer lexer = new LexerImpl();
+
+        // semi colons at the end of each statement is requerid for this istance of PrintScript
+        // String is not a type. string is.
+
+        String code = """
+                       let a: bigint = 1209381029381029381023;
+                       let b: Person = "new Person()"
+                       
+                """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        parser.parse(tokenStream).collect(Collectors.toList());
+    }
 
 }

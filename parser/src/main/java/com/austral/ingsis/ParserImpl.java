@@ -6,11 +6,8 @@ import com.austral.ingsis.matchers.expression.IdentifierMatcher;
 import com.austral.ingsis.matchers.expression.LiteralBooleanMatcher;
 import com.austral.ingsis.matchers.expression.LiteralNumberMatcher;
 import com.austral.ingsis.matchers.expression.LiteralStringMatcher;
-import com.austral.ingsis.matchers.statement.PrintMatcher;
-import com.austral.ingsis.matchers.statement.VariableAssignmentMatcher;
-import com.austral.ingsis.matchers.statement.VariableDefinitionMatcher;
+import com.austral.ingsis.matchers.statement.*;
 import com.austral.ingsis.matchers.StatementMatcher;
-import com.austral.ingsis.matchers.statement.VariableExplicitDefinitionMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +22,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             new VariableDefinitionMatcher(this),
             new VariableAssignmentMatcher(this),
             new VariableExplicitDefinitionMatcher(this),
+            new VariableExplicitDefinitionWithNoValueMatcher(this),
             new PrintMatcher(this)
     );
 
