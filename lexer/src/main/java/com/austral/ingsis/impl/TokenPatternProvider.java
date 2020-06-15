@@ -38,6 +38,8 @@ public class TokenPatternProvider {
         patterns.put(TokenType.ASSIGNATION,"=");
         patterns.put(TokenType.NUMBER,"-?[0-9]+");
         patterns.put(TokenType.OPENBRACE,"[{]");
+        patterns.put(TokenType.OPENPAR,"[(]");
+        patterns.put(TokenType.CLOSEPAR,"[)]");
         patterns.put(TokenType.CLOSEBRACE,"[}]");
         patterns.put(TokenType.IDENTIFIER,"[_a-zA-Z][_a-zA-Z0-9]*");
         patterns.put(TokenType.WHITESPACE,"[ \t\f\r]+");

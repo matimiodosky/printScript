@@ -17,7 +17,7 @@ public class LexerTest {
     @Test
     public void test001AllTokensAreIdentified() {
         for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
+            Stream<Character> input = "( ) true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
                     .chars()
                     .mapToObj(i -> (char) i);
 
@@ -35,7 +35,7 @@ public class LexerTest {
     @Test
     public void test002AllTokensAreIdentifiedOnce() {
         for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
+            Stream<Character> input = "( ) true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
                     .chars()
                     .mapToObj(i -> (char) i);
             Lexer lexer = new LexerImpl();

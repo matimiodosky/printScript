@@ -24,6 +24,8 @@ public enum TokenType {
     NUMBER,
     IF,
     ELSE,
+    OPENPAR,
+    CLOSEPAR,
     OPENBRACE,
     CLOSEBRACE,
     IMPORT,
