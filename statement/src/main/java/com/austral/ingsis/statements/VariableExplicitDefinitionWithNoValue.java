@@ -1,7 +1,6 @@
 package com.austral.ingsis.statements;
 
 
-import com.austral.ingsis.Expression;
 import com.austral.ingsis.Statement;
 
 /**

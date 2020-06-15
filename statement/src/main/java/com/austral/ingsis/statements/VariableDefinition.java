@@ -9,9 +9,9 @@ import com.austral.ingsis.Expression;
  */
 public class VariableDefinition extends Statement {
 
-    String identifier;
-    Boolean isConstant;
-    Expression<?> value;
+    final String identifier;
+    final Boolean isConstant;
+    final Expression<?> value;
 
     public VariableDefinition(String identifier, Boolean isConstant, Expression<?> value) {
         this.identifier = identifier;

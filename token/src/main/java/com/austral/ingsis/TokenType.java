@@ -33,6 +33,6 @@ public enum TokenType {
     IDENTIFIER,
     WHITESPACE,
     NEWLINE,
-    INVALIDTOKEN;
+    INVALIDTOKEN
 
 }

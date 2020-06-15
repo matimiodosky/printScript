@@ -9,14 +9,14 @@ import com.austral.ingsis.Statement;
  */
 public class Print extends Statement {
 
-    Expression value;
+    private final Expression<?> value;
 
-    public Print( Expression value) {
+    public Print( Expression<?> value) {
 
         this.value = value;
     }
 
-    public Expression getValue() {
+    public Expression<?> getValue() {
         return value;
     }
 }

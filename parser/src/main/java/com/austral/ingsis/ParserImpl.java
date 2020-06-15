@@ -56,14 +56,9 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
         return new SyntaxError(String.format("Invalid statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
     }
 
-    private SyntaxError expressionError(List<Token> tokens) {
-        Token lastToken = tokens.get(tokens.size() - 1);
-        return new SyntaxError(String.format("Invalid expression at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
-    }
-
 
     @Override
-    public Optional<? extends Expression> parseExpression(List<Token> tokens) {
+    public Optional<? extends Expression<?>> parseExpression(List<Token> tokens) {
          return expressionMatchers
                 .stream()
                 .map(matcher -> matcher.match(tokens.stream()))

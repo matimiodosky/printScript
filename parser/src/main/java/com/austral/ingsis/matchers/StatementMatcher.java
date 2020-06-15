@@ -5,7 +5,7 @@ import com.austral.ingsis.Statement;
 
 public abstract class StatementMatcher<T extends Statement> extends Matcher<T> {
 
-    protected ExpressionParser parser;
+    protected final ExpressionParser parser;
 
     public StatementMatcher(ExpressionParser parser) {
         this.parser = parser;
