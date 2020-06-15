@@ -1,22 +1,24 @@
 package com.austral.ingsis.statements;
 
 
-import com.austral.ingsis.Statement;
 import com.austral.ingsis.Expression;
+import com.austral.ingsis.Statement;
 
 /**
  * (const | let) (identifier) (equals) (literal | number | expression) (semicolon)
  */
-public class VariableDefinition extends Statement {
+public class VariableExplicitDefinition extends Statement {
 
-    String identifier;
-    Boolean isConstant;
-    Expression value;
+    private final String identifier;
+    private final Boolean isConstant;
+    private final Expression value;
+    private final String type;
 
-    public VariableDefinition(String identifier, Boolean isConstant, Expression value) {
+    public VariableExplicitDefinition(String identifier, Boolean isConstant, Expression value, String type) {
         this.identifier = identifier;
         this.isConstant = isConstant;
         this.value = value;
+        this.type = type;
     }
 
     public String getIdentifier() {
@@ -29,5 +31,9 @@ public class VariableDefinition extends Statement {
 
     public Expression getValue() {
         return value;
+    }
+
+    public String getType() {
+        return type;
     }
 }

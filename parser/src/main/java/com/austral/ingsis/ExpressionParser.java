@@ -1,7 +1,8 @@
 package com.austral.ingsis;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExpressionParser {
-    Expression parseExpression(List<Token> tokens);
+    Optional<? extends Expression> parseExpression(List<Token> tokens);
 }

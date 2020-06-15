@@ -2,6 +2,8 @@ package com.austral.ingsis;
 
 public enum TokenType {
     // Token types cannot have underscores
+    TRUELITERAL,
+    FALSELITERAL,
     LET,
     CONST,
     COLON,

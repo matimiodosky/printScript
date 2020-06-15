@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * (const | let) (identifier) (equals) (literal | number | expression) (semicolon)
  */
-public class VariableDefinitionMatcher extends StatementMatcher<VariableDefinition<?>> {
+public class VariableDefinitionMatcher extends StatementMatcher<VariableDefinition> {
 
 
     public VariableDefinitionMatcher(ExpressionParser parser) {
@@ -21,7 +21,7 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
     }
 
     @Override
-    public Optional<VariableDefinition<?>> match(Stream<Token> tokens) {
+    public Optional<VariableDefinition> match(Stream<Token> tokens) {
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());
@@ -40,14 +40,14 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
                 .of(usefulTokens.get(2))
                 .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Expression expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
-                .of(usefulTokens.get(4))
+                .of(usefulTokens.get(usefulTokens.size() - 1))
                 .filter(token -> token.getType() == TokenType.SEMICOLON);
 
-        if (keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
-            return Optional.of(new VariableDefinition<>(identifier.get().getData(), keyWord.get().getType() == TokenType.CONST, expression));
+        if (expression.isPresent() && keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
+            return Optional.of(new VariableDefinition(identifier.get().getData(), keyWord.get().getType() == TokenType.CONST, expression.get()));
         } else return Optional.empty();
 
     }

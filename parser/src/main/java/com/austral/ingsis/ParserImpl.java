@@ -2,11 +2,13 @@ package com.austral.ingsis;
 
 import com.austral.ingsis.exception.SyntaxError;
 import com.austral.ingsis.matchers.ExpressionMatcher;
+import com.austral.ingsis.matchers.expression.LiteralBooleanMatcher;
 import com.austral.ingsis.matchers.expression.LiteralNumberMatcher;
 import com.austral.ingsis.matchers.expression.LiteralStringMatcher;
 import com.austral.ingsis.matchers.statement.VariableAssignmentMatcher;
 import com.austral.ingsis.matchers.statement.VariableDefinitionMatcher;
 import com.austral.ingsis.matchers.StatementMatcher;
+import com.austral.ingsis.matchers.statement.VariableExplicitDefinitionMatcher;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,14 +19,16 @@ import java.util.stream.Stream;
 
 public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
-    private final List<StatementMatcher<?>> statementMatchers = Arrays.asList(
+    private final List<StatementMatcher<? extends Statement>> statementMatchers = Arrays.asList(
             new VariableDefinitionMatcher(this),
-            new VariableAssignmentMatcher(this)
+            new VariableAssignmentMatcher(this),
+            new VariableExplicitDefinitionMatcher(this)
     );
 
-    private final List<ExpressionMatcher<?>> expressionParsers = Arrays.asList(
+    private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
             new LiteralNumberMatcher(),
-            new LiteralStringMatcher()
+            new LiteralStringMatcher(),
+            new LiteralBooleanMatcher()
     );
 
     @Override
@@ -57,14 +61,13 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
 
     @Override
-    public Expression parseExpression(List<Token> tokens) {
-        return expressionParsers
+    public Optional<? extends Expression> parseExpression(List<Token> tokens) {
+         return expressionMatchers
                 .stream()
                 .map(matcher -> matcher.match(tokens.stream()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .findAny()
-                .orElseThrow(() -> this.expressionError(tokens));
+                .findAny();
     }
 
 

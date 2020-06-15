@@ -23,8 +23,8 @@ public class ParserTest {
 
         Lexer lexer = new LexerImpl();
         String code = """
-        let a = 0;
-        """;
+                let a = 0;
+                """;
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
 
         Stream<Token> tokenStream = lexer.scan(characterStream);
@@ -41,8 +41,8 @@ public class ParserTest {
 
         Lexer lexer = new LexerImpl();
         String code = """
-        a = 0;
-        """;
+                a = 0;
+                """;
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
 
         Stream<Token> tokenStream = lexer.scan(characterStream);
@@ -60,8 +60,8 @@ public class ParserTest {
 
         Lexer lexer = new LexerImpl();
         String code = """
-        a = "a";
-        """;
+                a = "a";
+                """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
 
@@ -74,11 +74,11 @@ public class ParserTest {
     }
 
     @Test
-    public void test004InvalidStatementAtLine0(){
+    public void test004InvalidStatementAtLine0() {
         Lexer lexer = new LexerImpl();
         String code = """
-        a;
-        """;
+                a;
+                """;
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
 
         Stream<Token> tokenStream = lexer.scan(characterStream);
@@ -87,33 +87,52 @@ public class ParserTest {
         Parser parser = new ParserImpl();
         try {
             parser.parse(tokenStream);
-        }catch (SyntaxError e){
+        } catch (SyntaxError e) {
             assertEquals(0, e.getLine());
         }
 
     }
 
     @Test
-    public void test004InvalidStatementAtLine1(){
+    public void test004InvalidStatementAtLine1() {
         Lexer lexer = new LexerImpl();
         String code = """
-        let a = 0;
-        a;
-        """;
+                let a = 0;
+                a;
+                """;
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-
         Stream<Token> tokenStream = lexer.scan(characterStream);
-
 
         Parser parser = new ParserImpl();
         try {
             parser.parse(tokenStream);
-        }catch (SyntaxError e){
+        } catch (SyntaxError e) {
             assertEquals(1, e.getLine());
         }
 
     }
 
+    @Test
+    public void test005Variables() {
+        Lexer lexer = new LexerImpl();
+
+        String code = """
+               let x: number = 5;
+               let y: string = "Something";
+               let z: string = 'AnotherThing';
+               let a: boolean = true;                 
+        """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+        List<Token> tokenList = tokenStream.collect(Collectors.toList());
+        System.out.println(tokenList);
+
+        Parser parser = new ParserImpl();
+        List<Statement> parse = parser.parse(tokenList.stream()).collect(Collectors.toList());
+        System.out.println();
+
+    }
 
 
 }

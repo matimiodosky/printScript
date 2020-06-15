@@ -5,8 +5,7 @@ import com.austral.ingsis.impl.LexerImpl;
 import com.austral.ingsis.impl.SyntaxError;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
@@ -18,7 +17,7 @@ public class LexerTest {
     @Test
     public void test001AllTokensAreIdentified() {
         for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
+            Stream<Character> input = "true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
                     .chars()
                     .mapToObj(i -> (char) i);
 
@@ -36,7 +35,7 @@ public class LexerTest {
     @Test
     public void test002AllTokensAreIdentifiedOnce() {
         for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
+            Stream<Character> input = "true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
                     .chars()
                     .mapToObj(i -> (char) i);
             Lexer lexer = new LexerImpl();
@@ -107,6 +106,18 @@ public class LexerTest {
             index = error.getIndex();
         }
         assertEquals(17, index);
+    }
+
+    @Test
+    public void test00tTrueScanned() {
+        Stream<Character> input = "true"
+                .chars()
+                .mapToObj(i -> (char) i);
+
+        Lexer lexer = new LexerImpl();
+
+        Stream<Token> scan = lexer.scan(input);
+        assertEquals(TokenType.TRUELITERAL, scan.collect(Collectors.toList()).get(0).getType());
     }
 
 

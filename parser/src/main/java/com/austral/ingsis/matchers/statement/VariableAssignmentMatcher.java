@@ -32,14 +32,14 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
                 .of(usefulTokens.get(1))
                 .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Expression expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 1));
+        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(2, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
-                .of(usefulTokens.get(3))
+                .of(usefulTokens.get(usefulTokens.size() - 1))
                 .filter(token -> token.getType() == TokenType.SEMICOLON);
 
-        if (identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
-           return Optional.of(new VariableAssignment(identifier.get().getData(), expression));
+        if (expression.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
+           return Optional.of(new VariableAssignment(identifier.get().getData(), expression.get()));
         } else return Optional.empty();
 
     }
