@@ -3,4 +3,5 @@ include 'cli'
 include 'lexer'
 include 'token'
 include 'parser'
+include 'statement'
 

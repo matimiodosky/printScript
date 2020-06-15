@@ -2,16 +2,16 @@ package com.austral.ingsis.expression;
 
 import com.austral.ingsis.Expression;
 
-public class Identifier extends Expression {
+public class Identifier extends Expression<Object> {
 
-    private final String value;
+    private final String name;
 
-    public Identifier(String value) {
-        this.value = value;
+    public Identifier(String name) {
+        super(null);
+        this.name = name;
     }
 
-    public String getValue() {
-        return value;
+    public String getName() {
+        return name;
     }
-
 }

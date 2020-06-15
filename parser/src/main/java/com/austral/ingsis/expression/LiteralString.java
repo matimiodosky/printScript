@@ -2,16 +2,12 @@ package com.austral.ingsis.expression;
 
 import com.austral.ingsis.Expression;
 
-public class LiteralString extends Expression {
+public class LiteralString extends Expression<String> {
 
-    private final String value;
 
     public LiteralString(String value) {
-        this.value = value;
+        super(value);
     }
 
-    public String getValue() {
-        return value;
-    }
 
 }

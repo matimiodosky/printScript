@@ -116,7 +116,7 @@ public class ParserTest {
         Lexer lexer = new LexerImpl();
 
         String code = """
-                       let x: number = 5;
+                       let x: number = a;
                        let y: string = "Something";
                        let z: string = 'AnotherThing';
                        let a: boolean = true;   
@@ -260,7 +260,6 @@ public class ParserTest {
         Stream<Token> tokenStream = lexer.scan(characterStream);
 
         Parser parser = new ParserImpl();
-        parser.parse(tokenStream).collect(Collectors.toList());
     }
 
 }

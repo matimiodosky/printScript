@@ -39,6 +39,11 @@ project(':token') {
 
 }
 
+project(':statement') {
+
+}
+
+
 project(':lexer') {
     dependencies {
         compile project(':token')
@@ -49,6 +54,7 @@ project(':lexer') {
 project(':parser') {
     dependencies {
         compile project(':token')
+        compile project(':statement')
         testCompile project(':lexer')
     }
 }
