@@ -2,9 +2,11 @@ package com.austral.ingsis;
 
 import com.austral.ingsis.exception.SyntaxError;
 import com.austral.ingsis.matchers.ExpressionMatcher;
+import com.austral.ingsis.matchers.expression.IdentifierMatcher;
 import com.austral.ingsis.matchers.expression.LiteralBooleanMatcher;
 import com.austral.ingsis.matchers.expression.LiteralNumberMatcher;
 import com.austral.ingsis.matchers.expression.LiteralStringMatcher;
+import com.austral.ingsis.matchers.statement.PrintMatcher;
 import com.austral.ingsis.matchers.statement.VariableAssignmentMatcher;
 import com.austral.ingsis.matchers.statement.VariableDefinitionMatcher;
 import com.austral.ingsis.matchers.StatementMatcher;
@@ -22,13 +24,15 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
     private final List<StatementMatcher<? extends Statement>> statementMatchers = Arrays.asList(
             new VariableDefinitionMatcher(this),
             new VariableAssignmentMatcher(this),
-            new VariableExplicitDefinitionMatcher(this)
+            new VariableExplicitDefinitionMatcher(this),
+            new PrintMatcher(this)
     );
 
     private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
             new LiteralNumberMatcher(),
             new LiteralStringMatcher(),
-            new LiteralBooleanMatcher()
+            new LiteralBooleanMatcher(),
+            new IdentifierMatcher()
     );
 
     @Override

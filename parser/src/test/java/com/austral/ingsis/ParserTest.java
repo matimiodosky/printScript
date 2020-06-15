@@ -117,19 +117,23 @@ public class ParserTest {
         Lexer lexer = new LexerImpl();
 
         String code = """
-               let x: number = 5;
-               let y: string = "Something";
-               let z: string = 'AnotherThing';
-               let a: boolean = true;                 
-        """;
+                       let x: number = 5;
+                       let y: string = "Something";
+                       let z: string = 'AnotherThing';
+                       let a: boolean = true;   
+                       
+                       print(x);
+                       print(y);
+                       print(z);
+                       print(a);
+                                             
+                """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
         Stream<Token> tokenStream = lexer.scan(characterStream);
-        List<Token> tokenList = tokenStream.collect(Collectors.toList());
-        System.out.println(tokenList);
 
         Parser parser = new ParserImpl();
-        List<Statement> parse = parser.parse(tokenList.stream()).collect(Collectors.toList());
+        List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
         System.out.println();
 
     }
