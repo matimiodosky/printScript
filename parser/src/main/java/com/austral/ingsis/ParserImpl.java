@@ -1,6 +1,7 @@
 package com.austral.ingsis;
 
-import com.austral.ingsis.parsers.AssignmentMatcher;
+import com.austral.ingsis.parsers.VariableAssignmentMatcher;
+import com.austral.ingsis.parsers.VariableDefinitionMatcher;
 import com.austral.ingsis.parsers.StatementMatcher;
 import com.austral.ingsis.statements.Statement;
 
@@ -14,7 +15,8 @@ import java.util.stream.Stream;
 public class ParserImpl implements Parser {
 
     private final List<StatementMatcher<?>> parsers = Arrays.asList(
-            new AssignmentMatcher()
+            new VariableDefinitionMatcher(),
+            new VariableAssignmentMatcher()
     );
 
     @Override
@@ -28,7 +30,7 @@ public class ParserImpl implements Parser {
     private Statement parseStatement(Statement statement) {
         return parsers
                 .stream()
-                .map(matcher -> matcher.match(statement))
+                .map(matcher -> matcher.match(statement.getTokens().stream()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findAny()
