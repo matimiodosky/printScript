@@ -17,7 +17,6 @@ import static org.junit.Assert.assertTrue;
 
 public class ParserTest {
 
-
     @Test
     public void tbs001VariableDefiniteIsParsed() {
 
@@ -147,7 +146,6 @@ public class ParserTest {
         System.out.println();
 
     }
-
 
     @Test
     public void test0006DeclareVaibalesWithSpacesExample(){
