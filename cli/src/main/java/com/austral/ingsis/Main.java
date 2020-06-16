@@ -1,7 +1,11 @@
 package com.austral.ingsis;
 
+import com.austral.ingsis.commands.Version;
+import picocli.CommandLine;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println("Welcome to PrintScript");
+
+    public static void main(String... args) {
+        int exitCode = new CommandLine(new Version()).execute(args);
     }
 }

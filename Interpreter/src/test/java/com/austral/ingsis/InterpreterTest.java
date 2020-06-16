@@ -34,7 +34,7 @@ public class InterpreterTest {
                 .map(Objects::toString)
                 .collect(Collectors.joining());
 
-        assertEquals("hola", outString);
+        assertEquals("hola\n", outString);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class InterpreterTest {
                 .map(Objects::toString)
                 .collect(Collectors.joining());
 
-        assertEquals("hola", outString);
+        assertEquals("hola\n", outString);
     }
 
     @Test
@@ -86,7 +86,7 @@ public class InterpreterTest {
                 .map(Objects::toString)
                 .collect(Collectors.joining());
 
-        assertEquals("chau", outString);
+        assertEquals("chau\n", outString);
     }
 
     @Test(expected = RuntimeException.class)

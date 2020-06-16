@@ -29,12 +29,6 @@ subprojects {
     }
 }
 
-project(':cli') {
-    dependencies {
-        compile project(':token')
-    }
-}
-
 project(':token') {
 
 }
@@ -51,13 +45,11 @@ project(':interpreter') {
     }
 }
 
-
 project(':lexer') {
     dependencies {
         compile project(':token')
     }
 }
-
 
 project(':parser') {
     dependencies {
@@ -66,3 +58,25 @@ project(':parser') {
         testCompile project(':lexer')
     }
 }
+
+project(':cli') {
+    dependencies {
+        compile project(':lexer')
+        compile project(':parser')
+        compile project(':interpreter')
+        compile 'info.picocli:picocli:4.3.2'
+        annotationProcessor 'info.picocli:picocli-codegen:4.3.2'
+    }
+    compileJava {
+        options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+    }
+    jar {
+        manifest {
+            attributes(
+                    'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+                    'Main-Class': 'com.austral.ingsis.Main'
+            )
+        }
+    }
+}
+
