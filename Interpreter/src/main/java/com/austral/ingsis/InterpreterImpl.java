@@ -45,11 +45,11 @@ public class InterpreterImpl implements Interpreter {
     }
 
     private void interpret(Scope scope, VariableDefinition statement) {
-        throw new RuntimeException("Not implemented: " + statement.getClass().getName());
+        scope.defineVariable(statement);
     }
 
     private void interpret(Scope scope, VariableExplicitDefinitionWithNoValue statement) {
-        throw new RuntimeException("Not implemented: " + statement.getClass().getName());
+        scope.defineVariable(statement);
     }
 
     private void interpret(Scope scope, VariableAssignment statement) {

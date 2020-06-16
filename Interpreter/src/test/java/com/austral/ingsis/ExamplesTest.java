@@ -27,7 +27,7 @@ public class ExamplesTest {
         assertEquals(expectedOut, out);
     }
     @Test
-    public void test004ExampleVariables() {
+    public void test001ExampleVariables() {
 
         String code = """
                 let x: number = 5;
@@ -47,6 +47,57 @@ public class ExamplesTest {
                 Something
                 AnotherThing
                 true
+                """;
+
+        test(code, expectedOut);
+    }
+
+    @Test
+    public void test002ExampleVariablesWithout() {
+
+        String code = """
+                let y: string;
+                let x: number;
+                let z: boolean;
+                                
+                print(x);
+                print(y);
+                print(z);
+                                
+                """;
+
+        String expectedOut = """
+                null
+                null
+                null
+                """;
+
+        test(code, expectedOut);
+    }
+
+    @Test
+    public void test003ExampleVariablesReAssigned() {
+
+        String code = """
+                let x: number = 5;
+                let y: string = "AnotherThing";
+                                
+                print(x);
+                print(y);
+                                
+                y = "SomethingElse";
+                x = 18;
+                print(x);
+                print(y);
+                                
+                                
+                """;
+
+        String expectedOut = """
+                5
+                AnotherThing
+                18
+                SomethingElse
                 """;
 
         test(code, expectedOut);
