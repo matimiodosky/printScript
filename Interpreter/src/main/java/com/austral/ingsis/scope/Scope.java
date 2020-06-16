@@ -1,5 +1,10 @@
-package com.austral.ingsis;
+package com.austral.ingsis.scope;
 
+import com.austral.ingsis.*;
+import com.austral.ingsis.scope.helpers.Resolver;
+import com.austral.ingsis.scope.helpers.ResolverImpl;
+import com.austral.ingsis.scope.helpers.VariableAssigner;
+import com.austral.ingsis.scope.helpers.VariableDefiner;
 import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;

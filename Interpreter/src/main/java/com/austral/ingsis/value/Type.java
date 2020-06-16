@@ -1,4 +1,4 @@
-package com.austral.ingsis;
+package com.austral.ingsis.value;
 
 public enum  Type {
 

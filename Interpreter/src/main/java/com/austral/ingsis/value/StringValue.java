@@ -1,9 +1,5 @@
 package com.austral.ingsis.value;
 
-import com.austral.ingsis.Type;
-
-import java.util.Optional;
-
 public class StringValue extends Value {
 
     private final String value;

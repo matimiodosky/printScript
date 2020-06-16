@@ -1,12 +1,13 @@
-package com.austral.ingsis;
+package com.austral.ingsis.scope.helpers;
 
+import com.austral.ingsis.Expression;
+import com.austral.ingsis.Statement;
+import com.austral.ingsis.value.Type;
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinitionWithNoValue;
 import com.austral.ingsis.value.Null;
 import com.austral.ingsis.value.Value;
-
-import java.util.Optional;
 
 public class VariableDefinerImpl implements VariableDefiner {
 

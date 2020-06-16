@@ -1,4 +1,4 @@
-package com.austral.ingsis;
+package com.austral.ingsis.scope.helpers;
 
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;

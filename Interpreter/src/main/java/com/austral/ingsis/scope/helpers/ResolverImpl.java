@@ -1,7 +1,9 @@
-package com.austral.ingsis;
+package com.austral.ingsis.scope.helpers;
 
+import com.austral.ingsis.Expression;
 import com.austral.ingsis.expression.Identifier;
 import com.austral.ingsis.expression.LiteralString;
+import com.austral.ingsis.scope.Scope;
 import com.austral.ingsis.value.StringValue;
 import com.austral.ingsis.value.Value;
 

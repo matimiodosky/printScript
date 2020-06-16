@@ -1,9 +1,6 @@
-package com.austral.ingsis;
+package com.austral.ingsis.scope.helpers;
 
 import com.austral.ingsis.statements.VariableAssignment;
-import com.austral.ingsis.statements.VariableDefinition;
-import com.austral.ingsis.statements.VariableExplicitDefinition;
-import com.austral.ingsis.statements.VariableExplicitDefinitionWithNoValue;
 import com.austral.ingsis.value.Value;
 
 import java.util.function.BiFunction;

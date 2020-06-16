@@ -1,9 +1,5 @@
 package com.austral.ingsis.value;
 
-import com.austral.ingsis.Type;
-
-import java.util.Optional;
-
 public abstract class Value {
 
     private final Boolean isConstant;
