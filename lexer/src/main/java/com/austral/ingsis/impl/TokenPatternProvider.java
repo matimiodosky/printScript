@@ -25,7 +25,7 @@ public class TokenPatternProvider {
         patterns.put(TokenType.IMPORT,"import");
         patterns.put(TokenType.PRINT,"print");
         patterns.put(TokenType.COLON,":");
-        patterns.put(TokenType.LITERAL,"\"([_a-zA-Z0-9])*\"|'([_a-zA-Z0-9])*'");
+        patterns.put(TokenType.LITERAL,"\"([_a-zA-Z0-9 !])*\"|'([_a-zA-Z0-9 ])*'");
         patterns.put(TokenType.SEMICOLON,";");
         patterns.put(TokenType.PLUS,"[+]");
         patterns.put(TokenType.MINUS,"[-]");

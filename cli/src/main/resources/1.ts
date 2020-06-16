@@ -1,2 +1,2 @@
-const myFirstVariable: string = "hello";
+const myFirstVariable: string = "hello world!!!";
 print(myFirstVariable);
