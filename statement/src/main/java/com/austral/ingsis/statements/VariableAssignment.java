@@ -10,21 +10,21 @@ import com.austral.ingsis.Statement;
 public class VariableAssignment extends Statement {
 
     private final String identifier;
-    private final Expression value;
+    private final Expression expression;
 
 
 
     public VariableAssignment(String identifier, Expression value, int line, int index) {
         super(line, index);
         this.identifier = identifier;
-        this.value = value;
+        this.expression = value;
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public Expression getValue() {
-        return value;
+    public Expression getExpression() {
+        return expression;
     }
 }

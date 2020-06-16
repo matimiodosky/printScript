@@ -11,14 +11,14 @@ public class VariableExplicitDefinition extends Statement {
 
     private final String identifier;
     private final Boolean isConstant;
-    private final Expression value;
+    private final Expression expression;
     private final String type;
 
     public VariableExplicitDefinition(String identifier, Boolean isConstant, Expression value, String type, int line, int index) {
         super(line, index);
         this.identifier = identifier;
         this.isConstant = isConstant;
-        this.value = value;
+        this.expression = value;
         this.type = type;
     }
 
@@ -30,8 +30,8 @@ public class VariableExplicitDefinition extends Statement {
         return isConstant;
     }
 
-    public Expression getValue() {
-        return value;
+    public Expression getExpression() {
+        return expression;
     }
 
     public String getType() {

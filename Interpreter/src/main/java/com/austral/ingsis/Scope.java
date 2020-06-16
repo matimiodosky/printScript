@@ -1,9 +1,8 @@
 package com.austral.ingsis;
 
-import com.austral.ingsis.expression.Identifier;
-import com.austral.ingsis.expression.LiteralBoolean;
-import com.austral.ingsis.expression.LiteralNumber;
-import com.austral.ingsis.expression.LiteralString;
+import com.austral.ingsis.statements.VariableDefinition;
+import com.austral.ingsis.statements.VariableExplicitDefinition;
+import com.austral.ingsis.statements.VariableExplicitDefinitionWithNoValue;
 import com.austral.ingsis.value.Value;
 
 import java.util.HashMap;
@@ -12,14 +11,16 @@ import java.util.stream.Stream;
 
 public class Scope {
 
-    private final VariableDefiner variableDefiner;
 
+    private final VariableDefiner variableDefiner;
+    private final Resolver resolver;
     private Stream<Character> out = Stream.empty();
 
     private final Map<String, Value> values = new HashMap<>();
 
     public Scope(VariableDefiner variableDefiner) {
-        this.variableDefiner = variableDefiner;
+        resolver = new ResolverImpl(this);
+        this.variableDefiner = variableDefiner.withResolver(resolver);
     }
 
     public void append(final Stream<Character> out){
@@ -30,12 +31,27 @@ public class Scope {
         return out;
     }
 
-    public void defineVariable(String i, Value v) {
-        values.compute(i, variableDefiner);
+    public void defineVariable(VariableExplicitDefinition statement) {
+        values.compute(statement.getIdentifier(),variableDefiner.withStatement(statement));
+    }
 
+    public void defineVariable(VariableExplicitDefinitionWithNoValue statement) {
+        values.compute(statement.getIdentifier(), variableDefiner.withStatement(statement));
+    }
+
+    public void defineVariable(VariableDefinition statement) {
+        values.compute(statement.getIdentifier(), variableDefiner.withStatement(statement));
     }
 
 
+    public Value getVariableValue(String n) {
+        return values.compute(n, (name, value) -> {
+            if (value == null)throw new RuntimeException("No such variable");
+            return value;
+        });
+    }
 
-
+    public Value resolve(Expression expression) {
+        return resolver.resolve(expression);
+    }
 }

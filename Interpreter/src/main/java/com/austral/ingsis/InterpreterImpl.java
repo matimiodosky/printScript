@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 public class InterpreterImpl implements Interpreter {
 
+
     @Override
     public Stream<Character> interpret(Stream<Statement> statements) {
 
@@ -29,12 +30,15 @@ public class InterpreterImpl implements Interpreter {
     }
 
     private void interpret(Scope scope, Print statement) {
-
-//        scope.append(this.toStream(scope.resolve(statement.getExpression())));
+        scope.append(
+                this.toStream(
+                        scope.resolve(statement.getExpression()).toString()
+                )
+        );
     }
 
     private void interpret(Scope scope, VariableExplicitDefinition statement) {
-//       scope.defineVariable();
+        scope.defineVariable(statement);
     }
 
     private void interpret(Scope scope, VariableDefinition statement) {

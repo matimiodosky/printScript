@@ -6,8 +6,6 @@ import com.austral.ingsis.impl.LexerImpl;
 import com.austral.ingsis.statements.*;
 import org.junit.Test;
 
-import javax.naming.ldap.PagedResultsControl;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -69,7 +67,7 @@ public class ParserTest {
         Parser parser = new ParserImpl();
         List<Statement> statements = parser.parse(tokenStream).collect(Collectors.toList());
         assertTrue(statements.get(0) instanceof VariableAssignment);
-        assertTrue(((VariableAssignment) statements.get(0)).getValue() instanceof LiteralString);
+        assertTrue(((VariableAssignment) statements.get(0)).getExpression() instanceof LiteralString);
     }
 
     @Test

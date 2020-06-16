@@ -11,13 +11,13 @@ public class VariableDefinition extends Statement {
 
     final String identifier;
     final Boolean isConstant;
-    final Expression value;
+    final Expression expression;
 
     public VariableDefinition(String identifier, Boolean isConstant, Expression value, int line, int index) {
         super(line, index);
         this.identifier = identifier;
         this.isConstant = isConstant;
-        this.value = value;
+        this.expression = value;
     }
 
     public String getIdentifier() {
@@ -28,7 +28,7 @@ public class VariableDefinition extends Statement {
         return isConstant;
     }
 
-    public Expression getValue() {
-        return value;
+    public Expression getExpression() {
+        return expression;
     }
 }
