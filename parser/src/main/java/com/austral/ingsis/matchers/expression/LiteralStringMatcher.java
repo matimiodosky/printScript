@@ -1,5 +1,6 @@
 package com.austral.ingsis.matchers.expression;
 
+import com.austral.ingsis.ExpressionParser;
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
 import com.austral.ingsis.expression.LiteralString;
@@ -11,6 +12,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LiteralStringMatcher extends ExpressionMatcher<LiteralString> {
+
+
+    public LiteralStringMatcher(ExpressionParser expressionMatcher) {
+        super(expressionMatcher);
+    }
 
     @Override
     public Optional<LiteralString> match(Stream<Token> tokenStream) {

@@ -1,5 +1,7 @@
 package com.austral.ingsis.value;
 
+import java.util.Optional;
+
 public abstract class Value {
 
     private final Boolean isConstant;
@@ -11,6 +13,26 @@ public abstract class Value {
         this.isDefined = isDefined;
         this.type = type;
     }
+
+    public NumberValue getAsNumber() {
+        return ((NumberValue) this);
+    }
+
+    public boolean isNumber(){return type.equals(Type.NUMBER);}
+
+    public StringValue getAsString() {
+        return ((StringValue) this);
+    }
+
+    public boolean isString(){return type.equals(Type.STRING);}
+
+
+    public BooleanValue getAsBoolean() {
+        return ((BooleanValue) this);
+    }
+
+    public boolean isBoolean(){return type.equals(Type.BOOLEAN);}
+
 
     public Boolean isConstant() {
         return isConstant;

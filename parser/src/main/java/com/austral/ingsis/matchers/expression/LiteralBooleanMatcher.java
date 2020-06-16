@@ -1,9 +1,9 @@
 package com.austral.ingsis.matchers.expression;
 
+import com.austral.ingsis.ExpressionParser;
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
 import com.austral.ingsis.expression.LiteralBoolean;
-import com.austral.ingsis.expression.LiteralString;
 import com.austral.ingsis.matchers.ExpressionMatcher;
 
 import java.util.List;
@@ -12,6 +12,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LiteralBooleanMatcher extends ExpressionMatcher<LiteralBoolean> {
+
+
+    public LiteralBooleanMatcher(ExpressionParser expressionMatcher) {
+        super(expressionMatcher);
+    }
 
     @Override
     public Optional<LiteralBoolean> match(Stream<Token> tokenStream) {

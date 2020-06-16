@@ -36,7 +36,7 @@ public class TokenPatternProvider {
         patterns.put(TokenType.LESSEQUAL,"<=");
         patterns.put(TokenType.LESS,"[<]");
         patterns.put(TokenType.ASSIGNATION,"=");
-        patterns.put(TokenType.NUMBER,"-?[0-9]+");
+        patterns.put(TokenType.NUMBER,"-?[0-9.]+");
         patterns.put(TokenType.OPENBRACE,"[{]");
         patterns.put(TokenType.OPENPAR,"[(]");
         patterns.put(TokenType.CLOSEPAR,"[)]");

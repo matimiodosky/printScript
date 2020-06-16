@@ -1,2 +1,3 @@
-const myFirstVariable: string = "hello world!!!";
-print(myFirstVariable);
+const c = 5 + 2 / 2;
+print(c);
+

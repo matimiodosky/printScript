@@ -103,4 +103,19 @@ public class ExamplesTest {
         test(code, expectedOut);
     }
 
+    @Test
+    public void test004ExampleSum() {
+
+        String code = """
+                let x: number = 1 + 1;        
+                print(x);  
+                """;
+
+        String expectedOut = """
+                2
+                """;
+
+        test(code, expectedOut);
+    }
+
 }

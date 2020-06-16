@@ -9,8 +9,12 @@ public class NumberValue extends Value {
         this.value = value;
     }
 
+    public Number getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
-        return value.intValue() + "";
+        return value.toString();
     }
 }
