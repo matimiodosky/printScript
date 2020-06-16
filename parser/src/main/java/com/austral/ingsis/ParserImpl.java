@@ -17,6 +17,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
     private final List<StatementMatcher<? extends Statement>> statementMatchers = Arrays.asList(
             new IfMatcher(this, this),
+            new ImportMatcher(this),
             new VariableDefinitionMatcher(this),
             new VariableAssignmentMatcher(this),
             new VariableExplicitDefinitionMatcher(this),

@@ -6,10 +6,25 @@ import com.austral.ingsis.scope.helpers.variable.VariableDefinerImpl;
 import com.austral.ingsis.statements.*;
 import com.austral.ingsis.value.Value;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.stream.Stream;
 
 public class InterpreterImpl implements Interpreter {
 
+
+    private final ProgramParser programParser;
+
+    public InterpreterImpl(ProgramParser programParser) {
+        this.programParser = programParser;
+    }
+
+
+    public InterpreterImpl() {
+        this.programParser = null;
+    }
 
     @Override
     public Stream<Character> interpret(Stream<Statement> statements) {
@@ -22,7 +37,11 @@ public class InterpreterImpl implements Interpreter {
     private void interpret(Scope scope, Statement statement) {
         if (statement instanceof Print print) {
             interpret(scope, print);
-        } else if (statement instanceof VariableExplicitDefinition variableExplicitDefinition) {
+        }
+        else if (statement instanceof Import imp) {
+            interpret(scope, imp);
+        }
+        else if (statement instanceof VariableExplicitDefinition variableExplicitDefinition) {
             interpret(scope, variableExplicitDefinition);
         } else if (statement instanceof VariableExplicitDefinitionWithNoValue variableDefinitionWithNoValue) {
             interpret(scope, variableDefinitionWithNoValue);
@@ -59,6 +78,15 @@ public class InterpreterImpl implements Interpreter {
         scope.assign(statement);
     }
 
+    private void interpret(Scope scope, Import statement) {
+        if (programParser == null)throw new RuntimeException("No program parser");
+        Value path = scope.resolve(statement.getPath());
+        if (!path.isString()) throw new RuntimeException("Invalid path");
+        String code = fileAsString(path.getAsString().getValue());
+        Stream<Statement> statementStream =  this.programParser.parse(code.chars().mapToObj(i -> (char)i));
+        scope.append(interpret(statementStream));
+    }
+
     private void interpret(Scope scope, If statement) {
         Value condition = scope.resolve(statement.getCondition());
         if (!condition.isBoolean()) throw new RuntimeException("condition should be boolean");
@@ -73,4 +101,21 @@ public class InterpreterImpl implements Interpreter {
                 .chars()
                 .mapToObj(i -> (char) i);
     }
+
+    private static String fileAsString(String filePath) {
+        try {
+            InputStream is = new FileInputStream(filePath);
+            BufferedReader buf = new BufferedReader(new InputStreamReader(is));
+            String line = buf.readLine();
+            StringBuilder sb = new StringBuilder();
+            while (line != null) {
+                sb.append(line).append("\n");
+                line = buf.readLine();
+            }
+            return sb.toString();
+        }catch (Exception e){
+            throw new RuntimeException("Could not read file");
+        }
+    }
+
 }

@@ -21,7 +21,8 @@ public class ExamplesTest {
         Parser parser = new ParserImpl();
         Stream<Statement> statements = parser.parse(tokenStream);
 
-        Interpreter interpreter = new InterpreterImpl();
+        Interpreter interpreter = new InterpreterImpl(in -> parser.parse(lexer.scan(in)));
+
         Stream<Character> outStream = interpreter.interpret(statements);
         String out = outStream.map(Objects::toString).collect(Collectors.joining());
         assertEquals(expectedOut, out);
@@ -113,6 +114,39 @@ public class ExamplesTest {
 
         String expectedOut = """
                 2
+                """;
+
+        test(code, expectedOut);
+    }
+
+    @Test
+    public void test005IFExample() {
+
+        String code = """
+                if(true){
+                    print("Hello");
+                };
+                if(false)}
+                    print("World");
+                }
+                """;
+
+        String expectedOut = """
+                Hello
+                """;
+
+        test(code, expectedOut);
+    }
+
+    @Test
+    public void test006Import() {
+
+        String code = """
+               import "/Users/matiasmiodosky/projects/austral/ing/printScript/Interpreter/src/test/resources/test.ts";
+                """;
+
+        String expectedOut = """
+                Hello World!!
                 """;
 
         test(code, expectedOut);
