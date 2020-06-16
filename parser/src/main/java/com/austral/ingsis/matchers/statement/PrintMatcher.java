@@ -52,7 +52,11 @@ public class PrintMatcher extends StatementMatcher<Print> {
 
         if (expression.isPresent() && keyWord.isPresent() && open.isPresent() && close.isPresent() && semicolon.isPresent()) {
             return Optional.of(
-                    new Print(expression.get())
+                    new Print(
+                            expression.get(),
+                            semicolon.get().getLine(),
+                            semicolon.get().getIndex()
+                    )
             );
         } else return Optional.empty();
 

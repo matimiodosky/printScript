@@ -17,19 +17,23 @@ public class InterpreterImpl implements Interpreter {
     private void interpret(Scope scope, Statement statement) {
         if (statement instanceof Print print) {
             interpret(scope, print);
-        } else if (statement instanceof VariableDefinition variableDefinition) {
-            interpret(scope, variableDefinition);
-        } else if (statement instanceof VariableExplicitDefinitionWithNoValue variableDefinitionWithNoValue) {
-            interpret(scope, variableDefinitionWithNoValue);
         } else if (statement instanceof VariableExplicitDefinition variableExplicitDefinition) {
             interpret(scope, variableExplicitDefinition);
+        } else if (statement instanceof VariableExplicitDefinitionWithNoValue variableDefinitionWithNoValue) {
+            interpret(scope, variableDefinitionWithNoValue);
+        } else if (statement instanceof VariableDefinition variableDefinition) {
+            interpret(scope, variableDefinition);
         } else if (statement instanceof VariableAssignment variableAssignment) {
             interpret(scope, variableAssignment);
-        }else throw new RuntimeException("Not implemented: " + statement.getClass().getName());
+        } else throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
 
     private void interpret(Scope scope, Print statement) {
         scope.append(this.toStream(statement.getValue().getValue()));
+    }
+
+    private void interpret(Scope scope, VariableExplicitDefinition statement) {
+//       scope.defineVariable();
     }
 
     private void interpret(Scope scope, VariableDefinition statement) {
@@ -40,9 +44,6 @@ public class InterpreterImpl implements Interpreter {
         throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
 
-    private void interpret(Scope scope, VariableExplicitDefinition statement) {
-        throw new RuntimeException("Not implemented: " + statement.getClass().getName());
-    }
 
     private void interpret(Scope scope, VariableAssignment statement) {
         throw new RuntimeException("Not implemented: " + statement.getClass().getName());

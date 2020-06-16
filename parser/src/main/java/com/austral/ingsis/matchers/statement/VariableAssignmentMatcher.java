@@ -39,7 +39,13 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
                 .filter(token -> token.getType() == TokenType.SEMICOLON);
 
         if (expression.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
-           return Optional.of(new VariableAssignment(identifier.get().getData(), expression.get()));
+           return Optional.of(new VariableAssignment(
+                   identifier.get().getData(),
+                   expression.get(),
+                   semicolon.get().getLine(),
+                   semicolon.get().getIndex()
+                   )
+           );
         } else return Optional.empty();
 
     }

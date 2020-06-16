@@ -26,7 +26,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             new PrintMatcher(this)
     );
 
-    private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
+    private final List<ExpressionMatcher<? extends Expression<?>>> expressionMatchers = Arrays.asList(
             new LiteralNumberMatcher(),
             new LiteralStringMatcher(),
             new LiteralBooleanMatcher(),

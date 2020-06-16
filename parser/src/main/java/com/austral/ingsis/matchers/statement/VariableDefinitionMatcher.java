@@ -26,7 +26,7 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());
 
-        if (usefulTokens.size() < 5)return Optional.empty();
+        if (usefulTokens.size() < 5) return Optional.empty();
 
         Optional<Token> keyWord = Optional
                 .of(usefulTokens.get(0))
@@ -40,14 +40,19 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
                 .of(usefulTokens.get(2))
                 .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+        Optional<? extends Expression<?>> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(usefulTokens.size() - 1))
                 .filter(token -> token.getType() == TokenType.SEMICOLON);
 
         if (expression.isPresent() && keyWord.isPresent() && identifier.isPresent() && equals.isPresent() && semicolon.isPresent()) {
-            return Optional.of(new VariableDefinition(identifier.get().getData(), keyWord.get().getType() == TokenType.CONST, expression.get()));
+            return Optional.of(new VariableDefinition(
+                    identifier.get().getData(),
+                    keyWord.get().getType() == TokenType.CONST, expression.get(),
+                    semicolon.get().getLine(),
+                    semicolon.get().getIndex()
+            ));
         } else return Optional.empty();
 
     }

@@ -11,8 +11,9 @@ public class Print extends Statement {
 
     private final Expression<?> value;
 
-    public Print( Expression<?> value) {
+    public Print( Expression<?> value, int line, int index) {
 
+        super(line, index);
         this.value = value;
     }
 

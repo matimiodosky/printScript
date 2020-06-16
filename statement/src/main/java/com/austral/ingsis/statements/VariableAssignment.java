@@ -14,7 +14,8 @@ public class VariableAssignment extends Statement {
 
 
 
-    public VariableAssignment(String identifier, Expression<?> value) {
+    public VariableAssignment(String identifier, Expression<?> value, int line, int index) {
+        super(line, index);
         this.identifier = identifier;
         this.value = value;
     }

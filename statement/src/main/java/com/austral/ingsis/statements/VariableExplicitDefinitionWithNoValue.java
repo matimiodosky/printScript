@@ -12,7 +12,8 @@ public class VariableExplicitDefinitionWithNoValue extends Statement {
     private final Boolean isConstant;
     private final String type;
 
-    public VariableExplicitDefinitionWithNoValue(String identifier, Boolean isConstant, String type) {
+    public VariableExplicitDefinitionWithNoValue(String identifier, Boolean isConstant, String type, int line, int index) {
+        super(line, index);
         this.identifier = identifier;
         this.isConstant = isConstant;
         this.type = type;

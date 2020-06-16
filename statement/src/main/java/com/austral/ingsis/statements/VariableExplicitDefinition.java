@@ -14,7 +14,8 @@ public class VariableExplicitDefinition extends Statement {
     private final Expression<?> value;
     private final String type;
 
-    public VariableExplicitDefinition(String identifier, Boolean isConstant, Expression<?> value, String type) {
+    public VariableExplicitDefinition(String identifier, Boolean isConstant, Expression<?> value, String type, int line, int index) {
+        super(line, index);
         this.identifier = identifier;
         this.isConstant = isConstant;
         this.value = value;

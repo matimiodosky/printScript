@@ -62,7 +62,11 @@ public class VariableExplicitDefinitionMatcher extends StatementMatcher<Variable
                             identifier.get().getData(),
                             keyWord.get().getType() == TokenType.CONST,
                             expression.get(),
-                            type.get().getData()));
+                            type.get().getData(),
+                            semicolon.get().getLine(),
+                            semicolon.get().getIndex()
+                    )
+            );
         } else return Optional.empty();
 
     }

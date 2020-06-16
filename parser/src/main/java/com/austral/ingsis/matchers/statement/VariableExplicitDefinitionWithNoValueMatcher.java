@@ -29,7 +29,7 @@ public class VariableExplicitDefinitionWithNoValueMatcher extends StatementMatch
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());
 
-        if (usefulTokens.size() < 5)return Optional.empty();
+        if (usefulTokens.size() < 5) return Optional.empty();
 
         Optional<Token> keyWord = Optional
                 .of(usefulTokens.get(0))
@@ -45,7 +45,7 @@ public class VariableExplicitDefinitionWithNoValueMatcher extends StatementMatch
 
         Optional<Token> type = Optional
                 .of(usefulTokens.get(3))
-                .filter(token -> token.getType() == TokenType.STRINGTYPE ||  token.getType() == TokenType.NUMBERTYPE ||  token.getType() == TokenType.BOOLEANTYPE);
+                .filter(token -> token.getType() == TokenType.STRINGTYPE || token.getType() == TokenType.NUMBERTYPE || token.getType() == TokenType.BOOLEANTYPE);
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(4))
@@ -56,7 +56,11 @@ public class VariableExplicitDefinitionWithNoValueMatcher extends StatementMatch
                     new VariableExplicitDefinitionWithNoValue(
                             identifier.get().getData(),
                             keyWord.get().getType() == TokenType.CONST,
-                            type.get().getData()));
+                            type.get().getData(),
+                            semicolon.get().getLine(),
+                            semicolon.get().getIndex()
+                    )
+            );
         } else return Optional.empty();
 
     }
