@@ -1,5 +1,6 @@
 package com.austral.ingsis;
 
+import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinitionWithNoValue;
@@ -13,14 +14,16 @@ public class Scope {
 
 
     private final VariableDefiner variableDefiner;
+    private final VariableAssigner variableAssigner;
     private final Resolver resolver;
     private Stream<Character> out = Stream.empty();
 
     private final Map<String, Value> values = new HashMap<>();
 
-    public Scope(VariableDefiner variableDefiner) {
+    public Scope(VariableDefiner variableDefiner, VariableAssigner variableAssigner) {
         resolver = new ResolverImpl(this);
         this.variableDefiner = variableDefiner.withResolver(resolver);
+        this.variableAssigner = variableAssigner.withResolver(resolver);
     }
 
     public void append(final Stream<Character> out){
@@ -53,5 +56,9 @@ public class Scope {
 
     public Value resolve(Expression expression) {
         return resolver.resolve(expression);
+    }
+
+    public void assign(VariableAssignment statement) {
+        values.compute(statement.getIdentifier(), variableAssigner.withStatement(statement));
     }
 }

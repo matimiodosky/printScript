@@ -10,7 +10,7 @@ public class InterpreterImpl implements Interpreter {
     @Override
     public Stream<Character> interpret(Stream<Statement> statements) {
 
-        Scope scope = new Scope(new VariableDefinerImpl());
+        Scope scope = new Scope(new VariableDefinerImpl(), new VariableAssignerImpl());
         statements.forEachOrdered(statement -> interpret(scope, statement));
         return scope.getOut();
     }
@@ -50,7 +50,7 @@ public class InterpreterImpl implements Interpreter {
     }
 
     private void interpret(Scope scope, VariableAssignment statement) {
-        throw new RuntimeException("Not implemented: " + statement.getClass().getName());
+        scope.assign(statement);
     }
 
     private Stream<Character> toStream(Object object) {

@@ -16,7 +16,7 @@ public abstract class Value {
         this.type = type;
     }
 
-    public Boolean getConstant() {
+    public Boolean isConstant() {
         return isConstant;
     }
 

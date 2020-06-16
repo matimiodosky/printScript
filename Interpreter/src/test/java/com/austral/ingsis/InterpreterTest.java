@@ -63,6 +63,52 @@ public class InterpreterTest {
         assertEquals("hola", outString);
     }
 
+    @Test
+    public void test003PrintRedefinedVariable() {
+
+        Lexer lexer = new LexerImpl();
+        String code = """
+                let a: string = "hola";
+                a = "chau";
+                print(a);
+        """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        Stream<Statement> statements = parser.parse(tokenStream);
+
+        Interpreter interpreter = new InterpreterImpl();
+        Stream<Character> out = interpreter.interpret(statements);
+
+        String outString = out
+                .map(Objects::toString)
+                .collect(Collectors.joining());
+
+        assertEquals("chau", outString);
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void test004ReassignmentToConstVariable() {
+
+        Lexer lexer = new LexerImpl();
+        String code = """
+                const a: string = "hola";
+                a = "chau";
+                print(a);
+        """;
+
+        Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
+        Stream<Token> tokenStream = lexer.scan(characterStream);
+
+        Parser parser = new ParserImpl();
+        Stream<Statement> statements = parser.parse(tokenStream);
+
+        Interpreter interpreter = new InterpreterImpl();
+        interpreter.interpret(statements);
+    }
+
 
 
 }

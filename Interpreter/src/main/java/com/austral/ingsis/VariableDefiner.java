@@ -16,9 +16,9 @@ public interface VariableDefiner extends BiFunction<String, Value, Value> {
 
     VariableDefinerImpl withStatement(VariableDefinition statement);
 
-    public VariableDefinerImpl withStatement(VariableExplicitDefinitionWithNoValue statement);
+    VariableDefinerImpl withStatement(VariableExplicitDefinitionWithNoValue statement);
 
-    public VariableDefinerImpl withResolver(Resolver resolver);
+    VariableDefinerImpl withResolver(Resolver resolver);
 
 
 }
