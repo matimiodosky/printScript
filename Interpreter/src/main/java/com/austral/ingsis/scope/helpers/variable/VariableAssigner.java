@@ -1,5 +1,6 @@
-package com.austral.ingsis.scope.helpers;
+package com.austral.ingsis.scope.helpers.variable;
 
+import com.austral.ingsis.scope.helpers.resolver.Resolver;
 import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.value.Value;
 

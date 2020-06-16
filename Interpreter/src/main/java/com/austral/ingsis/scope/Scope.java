@@ -1,10 +1,10 @@
 package com.austral.ingsis.scope;
 
 import com.austral.ingsis.*;
-import com.austral.ingsis.scope.helpers.Resolver;
-import com.austral.ingsis.scope.helpers.ResolverImpl;
-import com.austral.ingsis.scope.helpers.VariableAssigner;
-import com.austral.ingsis.scope.helpers.VariableDefiner;
+import com.austral.ingsis.scope.helpers.resolver.Resolver;
+import com.austral.ingsis.scope.helpers.resolver.ResolverImpl;
+import com.austral.ingsis.scope.helpers.variable.VariableAssigner;
+import com.austral.ingsis.scope.helpers.variable.VariableDefiner;
 import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class Scope {
-
 
     private final VariableDefiner variableDefiner;
     private final VariableAssigner variableAssigner;
@@ -50,7 +49,6 @@ public class Scope {
     public void defineVariable(VariableDefinition statement) {
         values.compute(statement.getIdentifier(), variableDefiner.withStatement(statement));
     }
-
 
     public Value getVariableValue(String n) {
         return values.compute(n, (name, value) -> {

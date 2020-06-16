@@ -1,7 +1,8 @@
-package com.austral.ingsis.scope.helpers;
+package com.austral.ingsis.scope.helpers.variable;
 
 import com.austral.ingsis.Expression;
 import com.austral.ingsis.Statement;
+import com.austral.ingsis.scope.helpers.resolver.Resolver;
 import com.austral.ingsis.value.Type;
 import com.austral.ingsis.statements.VariableDefinition;
 import com.austral.ingsis.statements.VariableExplicitDefinition;

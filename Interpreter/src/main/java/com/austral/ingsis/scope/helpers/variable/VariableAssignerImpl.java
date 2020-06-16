@@ -1,5 +1,6 @@
-package com.austral.ingsis.scope.helpers;
+package com.austral.ingsis.scope.helpers.variable;
 
+import com.austral.ingsis.scope.helpers.resolver.Resolver;
 import com.austral.ingsis.statements.VariableAssignment;
 import com.austral.ingsis.value.Value;
 
@@ -18,6 +19,18 @@ public class VariableAssignerImpl implements VariableAssigner {
         this.resolver = null;
     }
 
+
+    @Override
+    public Value apply(String s, Value oldValue) {
+        if (resolver == null) throw new IllegalStateException("Unspecified resolver");
+        if (statement == null) throw new IllegalStateException("Unspecified statement");
+
+        if (oldValue.isConstant()) throw new RuntimeException("Re assignment to const variable");
+        Value value = resolver.resolve(statement.getExpression());
+        if (value.getType() != oldValue.getType()) throw new RuntimeException("Incompatible types");
+        return value;
+    }
+
     @Override
     public VariableAssigner withStatement(VariableAssignment statement) {
        return new VariableAssignerImpl(statement, resolver);
@@ -28,15 +41,6 @@ public class VariableAssignerImpl implements VariableAssigner {
         return new VariableAssignerImpl(statement, resolver);
     }
 
-    @Override
-    public Value apply(String s, Value oldValue) {
-        if (resolver == null) throw new IllegalStateException("Unspecified resolver");
-        if (statement == null) throw new IllegalStateException("Unspecified statement");
-        if (oldValue.isConstant()) throw new RuntimeException("Re assignment to const variable");
-        Value value = resolver.resolve(statement.getExpression());
-        if (value.getType() != oldValue.getType()) throw new RuntimeException("Incompatible types");
-        return value;
-    }
 
 
 }

@@ -1,4 +1,4 @@
-package com.austral.ingsis.scope.helpers;
+package com.austral.ingsis.scope.helpers.resolver;
 
 import com.austral.ingsis.Expression;
 import com.austral.ingsis.expression.Identifier;

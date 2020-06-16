@@ -1,8 +1,8 @@
 package com.austral.ingsis;
 
 import com.austral.ingsis.scope.Scope;
-import com.austral.ingsis.scope.helpers.VariableAssignerImpl;
-import com.austral.ingsis.scope.helpers.VariableDefinerImpl;
+import com.austral.ingsis.scope.helpers.variable.VariableAssignerImpl;
+import com.austral.ingsis.scope.helpers.variable.VariableDefinerImpl;
 import com.austral.ingsis.statements.*;
 
 import java.util.stream.Stream;
