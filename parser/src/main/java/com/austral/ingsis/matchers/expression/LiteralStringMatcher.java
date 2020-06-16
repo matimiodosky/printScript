@@ -2,7 +2,6 @@ package com.austral.ingsis.matchers.expression;
 
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
-import com.austral.ingsis.expression.LiteralNumber;
 import com.austral.ingsis.expression.LiteralString;
 import com.austral.ingsis.matchers.ExpressionMatcher;
 

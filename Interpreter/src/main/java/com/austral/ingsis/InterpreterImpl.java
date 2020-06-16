@@ -9,7 +9,7 @@ public class InterpreterImpl implements Interpreter {
     @Override
     public Stream<Character> interpret(Stream<Statement> statements) {
 
-        Scope scope = new Scope();
+        Scope scope = new Scope(new VariableDefinerImpl());
         statements.forEachOrdered(statement -> interpret(scope, statement));
         return scope.getOut();
     }
@@ -29,7 +29,8 @@ public class InterpreterImpl implements Interpreter {
     }
 
     private void interpret(Scope scope, Print statement) {
-        scope.append(this.toStream(statement.getValue().getValue()));
+
+//        scope.append(this.toStream(scope.resolve(statement.getExpression())));
     }
 
     private void interpret(Scope scope, VariableExplicitDefinition statement) {
@@ -44,12 +45,14 @@ public class InterpreterImpl implements Interpreter {
         throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
 
-
     private void interpret(Scope scope, VariableAssignment statement) {
         throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
 
     private Stream<Character> toStream(Object object) {
-        return object.toString().chars().mapToObj(i -> (char) i);
+        return object
+                .toString()
+                .chars()
+                .mapToObj(i -> (char) i);
     }
 }

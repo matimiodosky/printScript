@@ -26,7 +26,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             new PrintMatcher(this)
     );
 
-    private final List<ExpressionMatcher<? extends Expression<?>>> expressionMatchers = Arrays.asList(
+    private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
             new LiteralNumberMatcher(),
             new LiteralStringMatcher(),
             new LiteralBooleanMatcher(),
@@ -58,7 +58,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
 
     @Override
-    public Optional<? extends Expression<?>> parseExpression(List<Token> tokens) {
+    public Optional<? extends Expression> parseExpression(List<Token> tokens) {
          return expressionMatchers
                 .stream()
                 .map(matcher -> matcher.match(tokens.stream()))

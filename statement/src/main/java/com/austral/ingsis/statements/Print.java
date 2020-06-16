@@ -9,15 +9,15 @@ import com.austral.ingsis.Statement;
  */
 public class Print extends Statement {
 
-    private final Expression<?> value;
+    private final Expression expression;
 
-    public Print( Expression<?> value, int line, int index) {
+    public Print( Expression value, int line, int index) {
 
         super(line, index);
-        this.value = value;
+        this.expression = value;
     }
 
-    public Expression<?> getValue() {
-        return value;
+    public Expression getExpression() {
+        return expression;
     }
 }

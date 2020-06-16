@@ -40,7 +40,7 @@ public class VariableDefinitionMatcher extends StatementMatcher<VariableDefiniti
                 .of(usefulTokens.get(2))
                 .filter(token -> token.getType() == TokenType.ASSIGNATION);
 
-        Optional<? extends Expression<?>> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
+        Optional<? extends Expression> expression = parser.parseExpression(usefulTokens.subList(3, usefulTokens.size() - 1));
 
         Optional<Token> semicolon = Optional
                 .of(usefulTokens.get(usefulTokens.size() - 1))

@@ -2,12 +2,11 @@ package com.austral.ingsis.expression;
 
 import com.austral.ingsis.Expression;
 
-public class Identifier extends Expression<Object> {
+public class Identifier extends Expression {
 
     private final String name;
 
     public Identifier(String name) {
-        super(null);
         this.name = name;
     }
 
