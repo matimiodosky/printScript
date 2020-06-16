@@ -15,6 +15,8 @@ public class NumberValue extends Value {
 
     @Override
     public String toString() {
-        return value.toString();
+        if (value.intValue() == value.doubleValue()){
+            return value.intValue() + "";
+        }else return value.toString();
     }
 }

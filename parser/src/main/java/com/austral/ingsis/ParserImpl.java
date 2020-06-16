@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
     private final List<StatementMatcher<? extends Statement>> statementMatchers = Arrays.asList(
+            new IfMatcher(this, this),
             new VariableDefinitionMatcher(this),
             new VariableAssignmentMatcher(this),
             new VariableExplicitDefinitionMatcher(this),
@@ -33,10 +34,28 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
     );
 
     @Override
-    public Stream<Statement> parse(Stream<Token> tokens) {
+    public Stream<Statement> parse(Stream<Token> tokenStream) {
+        List<Token> tokens = tokenStream.collect(Collectors.toList());
+        List<Token> acc = new ArrayList<>();
+        List<Statement> statements = new ArrayList<>();
+        int index = 0;
+        Optional<Statement> statement = Optional.empty();
+        while (statement.isEmpty() && index < tokens.size()){
+            acc.add(tokens.get(index));
+            index = index + 1;
+            statement = parseStatementToOptional(acc);
+            statement.ifPresent(statements::add);
+        }
+        if (tokens.isEmpty()) return statements.stream();
+        return Stream.concat(statements.stream(), parse(tokens.subList(index, tokens.size()).stream()));
+    }
 
-        return splitIntoStatements(tokens).map(this::parseStatement);
-
+    private Optional<Statement> parseStatementToOptional(List<Token> token){
+        try {
+            return Optional.of(parseStatement(token));
+        }catch (Exception e){
+            return Optional.empty();
+        }
     }
 
     @Override

@@ -101,7 +101,7 @@ public class VariableDefinerImpl implements VariableDefiner {
         if (hasExpression) {
             value = resolver.resolve(expression, isConstant);
         } else {
-           value = new Null(explicitType ? type : null);
+           value = new Null(explicitType ? type : null, isConstant);
         }
         if (explicitType){
             if(value.getType() != type) throw new RuntimeException("Incompatible types at [" + statement.getLine() + "," + statement.getIndex() + "]");

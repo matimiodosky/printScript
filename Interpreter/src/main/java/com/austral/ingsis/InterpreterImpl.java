@@ -4,6 +4,7 @@ import com.austral.ingsis.scope.Scope;
 import com.austral.ingsis.scope.helpers.variable.VariableAssignerImpl;
 import com.austral.ingsis.scope.helpers.variable.VariableDefinerImpl;
 import com.austral.ingsis.statements.*;
+import com.austral.ingsis.value.Value;
 
 import java.util.stream.Stream;
 
@@ -29,6 +30,8 @@ public class InterpreterImpl implements Interpreter {
             interpret(scope, variableDefinition);
         } else if (statement instanceof VariableAssignment variableAssignment) {
             interpret(scope, variableAssignment);
+        } else if (statement instanceof If ifstatement) {
+            interpret(scope, ifstatement);
         } else throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
 
@@ -54,6 +57,14 @@ public class InterpreterImpl implements Interpreter {
 
     private void interpret(Scope scope, VariableAssignment statement) {
         scope.assign(statement);
+    }
+
+    private void interpret(Scope scope, If statement) {
+        Value condition = scope.resolve(statement.getCondition());
+        if (!condition.isBoolean()) throw new RuntimeException("condition should be boolean");
+        if (condition.getAsBoolean().getValue()) {
+            statement.getInnerStatements().forEach(inner -> this.interpret(scope, inner));
+        }
     }
 
     private Stream<Character> toStream(Object object) {

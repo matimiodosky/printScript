@@ -14,9 +14,11 @@ public class Main {
     public static void main(String... args) {
         String code = fileAsString(args[0]);
         LexerImpl lexer = new LexerImpl();
+        Stream<Token> scan = lexer.scan(code.chars().mapToObj(i -> (char) i));
         Parser parser = new ParserImpl();
+        Stream<Statement> parse = parser.parse(scan);
         Interpreter interpreter = new InterpreterImpl();
-        Stream<Character> interpret = interpreter.interpret(parser.parse(lexer.scan(code.chars().mapToObj(i -> (char) i))));
+        Stream<Character> interpret = interpreter.interpret(parse);
         System.out.println(interpret.map(Object::toString).collect(Collectors.joining()));
     }
 

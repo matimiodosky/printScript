@@ -1,3 +1,5 @@
-const c = 5 + 2 / 2;
-print(c);
+let a: string;
 
+if(true){ a = "true!"; };
+
+print(a);
