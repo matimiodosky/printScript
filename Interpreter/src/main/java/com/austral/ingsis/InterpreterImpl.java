@@ -35,7 +35,7 @@ public class InterpreterImpl implements Interpreter {
     private void interpret(Scope scope, Print statement) {
         scope.append(
                 this.toStream(
-                        scope.resolve(statement.getExpression()).toString()
+                        scope.resolve(statement.getExpression()).toString() + "\n"
                 )
         );
     }
