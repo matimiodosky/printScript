@@ -128,7 +128,7 @@ public class ExamplesTest {
                 };
                 if(false)}
                     print("World");
-                }
+                };
                 """;
 
         String expectedOut = """

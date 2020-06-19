@@ -1,13 +1,14 @@
 package com.austral.ingsis.value;
 
-import java.util.Optional;
-
 public abstract class Value {
 
     private final Boolean isConstant;
     private final Boolean isDefined;
     private final Type type;
 
+    //pull down is... and get as...
+    //return optional
+    //todo
     protected Value(Boolean isConstant, Boolean isDefined, Type type) {
         this.isConstant = isConstant;
         this.isDefined = isDefined;
@@ -26,13 +27,11 @@ public abstract class Value {
 
     public boolean isString(){return type.equals(Type.STRING);}
 
-
     public BooleanValue getAsBoolean() {
         return ((BooleanValue) this);
     }
 
     public boolean isBoolean(){return type.equals(Type.BOOLEAN);}
-
 
     public Boolean isConstant() {
         return isConstant;

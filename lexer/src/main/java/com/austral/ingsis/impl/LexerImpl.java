@@ -4,10 +4,7 @@ import com.austral.ingsis.Lexer;
 import com.austral.ingsis.Token;
 import com.austral.ingsis.TokenType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,12 +16,12 @@ public class LexerImpl implements Lexer {
     private int currentIndex = 0;
     private final TokenPatternProvider tokenPatternProvider = new TokenPatternProvider();
 
-    public Stream<Token> scan(Stream<Character> characterStream) {
+    public Stream<Token> scan(Stream<Character> characterStream, List<TokenType> enabledOptionalFeatures) {
         ArrayList<Token> tokens = new ArrayList<>();
         Matcher matcher = getMatcher(characterStream);
         while (matcher.find()) {
             tokens.add(
-                    Arrays.stream(TokenType.values())
+                    tokenPatternProvider.getValues(enabledOptionalFeatures)
                             .filter(tokenType -> matcher.group(tokenType.name()) != null)
                             .findAny()
                             .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name()), this.currentLine, this.currentIndex))
@@ -34,6 +31,10 @@ public class LexerImpl implements Lexer {
                             .orElseThrow(() -> new SyntaxError(this.currentLine, this.currentIndex)));
         }
         return tokens.stream();
+    }
+
+    public Stream<Token> scan(Stream<Character> characterStream) {
+        return this.scan(characterStream, Collections.emptyList());
     }
 
     private Token advanceCurrentIndex(Token token) {

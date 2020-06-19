@@ -5,6 +5,7 @@ import com.austral.ingsis.impl.LexerImpl;
 import com.austral.ingsis.impl.SyntaxError;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,39 +18,36 @@ public class LexerTest {
     @Test
     public void test001AllTokensAreIdentified() {
         for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "( ) true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
+            Stream<Character> input = "( )   let  : hola  number string = \"hola\" ; + - * /  123 if else { } import print \n"
                     .chars()
                     .mapToObj(i -> (char) i);
 
             Lexer lexer = new LexerImpl();
             Stream<Token> tokens = lexer.scan(input);
-            if (tokenType != TokenType.WHITESPACE && tokenType != TokenType.INVALIDTOKEN)
-                assertTrue(
-                        String.format("Token not found: %s", tokenType),
-                        tokens.anyMatch(token -> token.getType().equals(tokenType))
-                );
+            assertTrue(tokens.noneMatch(token -> token.getType().equals(TokenType.INVALIDTOKEN)));
         }
 
     }
 
     @Test
     public void test002AllTokensAreIdentifiedOnce() {
-        for (TokenType tokenType : TokenType.values()) {
-            Stream<Character> input = "( ) true false let const : hola boolean number string = \"hola\" ; + - * / > >= < <= 123 if else { } import print \n"
-                    .chars()
-                    .mapToObj(i -> (char) i);
-            Lexer lexer = new LexerImpl();
-            var tokens = lexer.scan(input);
-            if (tokenType != TokenType.WHITESPACE && tokenType != TokenType.INVALIDTOKEN)
-                assertEquals(
-                        String.format("Token found more than once: %s", tokenType),
-                        1,
-                        tokens
-                                .filter(token -> token.getType().equals(tokenType))
-                                .peek(System.out::println)
-                                .count()
-                );
-        }
+
+        Stream<Character> input = "( )   let  : hola  number string = \"hola\" ; + - * /  123 if else { } import print \n"
+                .chars()
+                .mapToObj(i -> (char) i);
+        Lexer lexer = new LexerImpl();
+        var tokens = lexer.scan(input);
+        assertTrue(
+                tokens
+                        .filter(token -> token.getType() != TokenType.WHITESPACE)
+                        .filter(token -> token.getType() != TokenType.NEWLINE)
+                        .collect(Collectors.groupingBy(Token::getType))
+                        .values()
+                        .stream()
+                        .map(List::size)
+                        .allMatch(count -> count == 1)
+        );
+
     }
 
     @Test(expected = SyntaxError.class)
@@ -106,18 +104,6 @@ public class LexerTest {
             index = error.getIndex();
         }
         assertEquals(17, index);
-    }
-
-    @Test
-    public void test00tTrueScanned() {
-        Stream<Character> input = "true"
-                .chars()
-                .mapToObj(i -> (char) i);
-
-        Lexer lexer = new LexerImpl();
-
-        Stream<Token> scan = lexer.scan(input);
-        assertEquals(TokenType.TRUELITERAL, scan.collect(Collectors.toList()).get(0).getType());
     }
 
 

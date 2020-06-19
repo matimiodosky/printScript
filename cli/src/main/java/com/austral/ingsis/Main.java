@@ -17,7 +17,7 @@ public class Main {
         Stream<Token> scan = lexer.scan(code.chars().mapToObj(i -> (char) i));
         Parser parser = new ParserImpl();
         Stream<Statement> parse = parser.parse(scan);
-        Interpreter interpreter = new InterpreterImpl(programParser);
+        Interpreter interpreter = new InterpreterImpl(in -> parser.parse(lexer.scan(in)));
         Stream<Character> interpret = interpreter.interpret(parse);
         System.out.println(interpret.map(Object::toString).collect(Collectors.joining()));
     }
