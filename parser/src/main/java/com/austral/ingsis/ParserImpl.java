@@ -50,6 +50,13 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             statement.ifPresent(statements::add);
         }
         if (tokens.isEmpty()) return statements.stream();
+        if (index == tokens.size() && statement.isEmpty()){
+            throw new ParsignError(
+                    "unsfinished statement",
+                    tokens.get(tokens.size() - 1).getLine(),
+                    tokens.get(tokens.size() - 1).getIndex()
+                    );
+        }
         return Stream.concat(statements.stream(), parse(tokens.subList(index, tokens.size()).stream()));
     }
 

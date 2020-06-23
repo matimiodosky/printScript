@@ -202,4 +202,38 @@ public class ExamplesTest {
         );
     }
 
+    @Test
+    public void test008InnerIf() {
+
+        String code = """
+                if(true){
+                    print("true");
+                    if(true){
+                        print("true");
+                    }
+                }
+                if(true){
+                    print("false");
+                    if(false){
+                        print("false");
+                    }
+                }
+                                
+                """;
+
+        String expectedOut = """
+                true
+                true
+                false
+                """;
+
+        test(
+                code,
+                expectedOut,
+                Arrays.asList(
+                        TokenType.TRUELITERAL, TokenType.FALSELITERAL
+                )
+        );
+    }
+
 }
