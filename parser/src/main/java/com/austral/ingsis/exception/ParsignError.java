@@ -1,11 +1,11 @@
 package com.austral.ingsis.exception;
 
-public class SyntaxError extends RuntimeException {
+public class ParsignError extends RuntimeException {
 
     private final int line;
     private final int index;
 
-    public SyntaxError(String message, int line, int index) {
+    public ParsignError(String message, int line, int index) {
         super(message);
         this.line = line;
         this.index = index;

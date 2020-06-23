@@ -1,6 +1,6 @@
 package com.austral.ingsis;
 
-import com.austral.ingsis.exception.SyntaxError;
+import com.austral.ingsis.exception.ParsignError;
 import com.austral.ingsis.matchers.ExpressionMatcher;
 import com.austral.ingsis.matchers.expression.*;
 import com.austral.ingsis.matchers.statement.*;
@@ -36,7 +36,9 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
     @Override
     public Stream<Statement> parse(Stream<Token> tokenStream) {
-        List<Token> tokens = tokenStream.collect(Collectors.toList());
+        List<Token> tokens = tokenStream
+                .filter(this::usefulToken)
+                .collect(Collectors.toList());
         List<Token> acc = new ArrayList<>();
         List<Statement> statements = new ArrayList<>();
         int index = 0;
@@ -51,10 +53,15 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
         return Stream.concat(statements.stream(), parse(tokens.subList(index, tokens.size()).stream()));
     }
 
-    private Optional<Statement> parseStatementToOptional(List<Token> token){
+    private boolean usefulToken(Token token) {
+        return token.getType() != TokenType.WHITESPACE &&
+                token.getType() != TokenType.NEWLINE;
+    }
+
+    private Optional<Statement> parseStatementToOptional(List<Token> token) {
         try {
             return Optional.of(parseStatement(token));
-        }catch (Exception e){
+        } catch (Exception e) {
             return Optional.empty();
         }
     }
@@ -70,44 +77,19 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
                 .orElseThrow(() -> this.statementError(tokens));
     }
 
-    private SyntaxError statementError(List<Token> tokens) {
+    private ParsignError statementError(List<Token> tokens) {
         Token lastToken = tokens.get(tokens.size() - 1);
-        return new SyntaxError(String.format("Invalid statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
+        return new ParsignError(String.format("Invalid statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
     }
-
 
     @Override
     public Optional<? extends Expression> parseExpression(List<Token> tokens) {
-         return expressionMatchers
+        return expressionMatchers
                 .stream()
                 .map(matcher -> matcher.match(tokens.stream()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findAny();
-    }
-
-
-    private Stream<List<Token>> splitIntoStatements(Stream<Token> tokens) {
-        final List<List<Token>> statements = new ArrayList<>();
-        List<Token> currentStatement = new ArrayList<>();
-
-        for (Token token : tokens.collect(Collectors.toList())) {
-            currentStatement.add(token);
-            if (token.getType() == TokenType.SEMICOLON) {
-                statements.add(currentStatement);
-                currentStatement = new ArrayList<>();
-            }
-        }
-
-        if (!currentStatement
-                .stream()
-                .allMatch(x -> x.getType() == TokenType.WHITESPACE || x.getType() == TokenType.NEWLINE)
-        ) {
-            Token lastToken = currentStatement.get(currentStatement.size() - 1);
-            throw new SyntaxError(String.format("Unfinished statement at: [%d, %d]", lastToken.getLine(), lastToken.getIndex()), lastToken.getLine(), lastToken.getIndex());
-        }
-
-        return statements.stream();
     }
 
 }

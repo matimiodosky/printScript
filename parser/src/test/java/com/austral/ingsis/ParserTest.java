@@ -1,11 +1,14 @@
 package com.austral.ingsis;
 
-import com.austral.ingsis.exception.SyntaxError;
+import com.austral.ingsis.exception.ParsignError;
 import com.austral.ingsis.expression.LiteralString;
 import com.austral.ingsis.impl.LexerImpl;
 import com.austral.ingsis.statements.*;
+import com.sun.jdi.BooleanType;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,7 +87,7 @@ public class ParserTest {
         Parser parser = new ParserImpl();
         try {
             parser.parse(tokenStream);
-        } catch (SyntaxError e) {
+        } catch (ParsignError e) {
             assertEquals(0, e.getLine());
         }
 
@@ -103,7 +106,7 @@ public class ParserTest {
         Parser parser = new ParserImpl();
         try {
             parser.parse(tokenStream);
-        } catch (SyntaxError e) {
+        } catch (ParsignError e) {
             assertEquals(1, e.getLine());
         }
 
@@ -127,7 +130,7 @@ public class ParserTest {
                 """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream);
+        Stream<Token> tokenStream = lexer.scan(characterStream, Arrays.asList(TokenType.BOOLEANTYPE, TokenType.TRUELITERAL));
 
         Parser parser = new ParserImpl();
         List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
@@ -163,7 +166,7 @@ public class ParserTest {
                 """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream);
+        Stream<Token> tokenStream = lexer.scan(characterStream, Arrays.asList(TokenType.BOOLEANTYPE));
 
         Parser parser = new ParserImpl();
         List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
@@ -227,7 +230,7 @@ public class ParserTest {
                 """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream);
+        Stream<Token> tokenStream = lexer.scan(characterStream, Collections.singletonList(TokenType.BOOLEANTYPE));
 
         Parser parser = new ParserImpl();
         List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());
