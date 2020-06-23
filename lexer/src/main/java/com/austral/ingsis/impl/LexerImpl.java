@@ -23,7 +23,8 @@ public class LexerImpl implements Lexer {
             TokenType.LESS,
             TokenType.LESSEQUAL,
             TokenType.TRUELITERAL,
-            TokenType.FALSELITERAL
+            TokenType.FALSELITERAL,
+            TokenType.CONST
     );
 
     public Stream<Token> scan(Stream<Character> characterStream, List<TokenType> enabledOptionalFeatures) {

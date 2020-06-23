@@ -230,7 +230,7 @@ public class ParserTest {
                 """;
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream, Collections.singletonList(TokenType.BOOLEANTYPE));
+        Stream<Token> tokenStream = lexer.scan(characterStream, Arrays.asList(TokenType.BOOLEANTYPE, TokenType.CONST));
 
         Parser parser = new ParserImpl();
         List<Statement> parse = parser.parse(tokenStream).collect(Collectors.toList());

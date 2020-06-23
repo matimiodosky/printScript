@@ -3,6 +3,8 @@ package com.austral.ingsis;
 import com.austral.ingsis.impl.LexerImpl;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -48,7 +50,7 @@ public class InterpreterTest {
 
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream);
+        Stream<Token> tokenStream = lexer.scan(characterStream, Collections.singletonList(TokenType.CONST));
 
         Parser parser = new ParserImpl();
         Stream<Statement> statements = parser.parse(tokenStream);
