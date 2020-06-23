@@ -16,21 +16,38 @@ public class LexerImpl implements Lexer {
     private int currentIndex = 0;
     private final TokenPatternProvider tokenPatternProvider = new TokenPatternProvider();
 
+    private  final List<TokenType> disabledOptionalFeatures = Arrays.asList(
+            TokenType.BOOLEANTYPE,
+            TokenType.GRATER,
+            TokenType.GRATEREQUAL,
+            TokenType.LESS,
+            TokenType.LESSEQUAL,
+            TokenType.TRUELITERAL,
+            TokenType.FALSELITERAL
+    );
+
     public Stream<Token> scan(Stream<Character> characterStream, List<TokenType> enabledOptionalFeatures) {
         ArrayList<Token> tokens = new ArrayList<>();
         Matcher matcher = getMatcher(characterStream);
         while (matcher.find()) {
             tokens.add(
-                    tokenPatternProvider.getValues(enabledOptionalFeatures)
+                    tokenPatternProvider.getValues()
                             .filter(tokenType -> matcher.group(tokenType.name()) != null)
                             .findAny()
                             .map(tokenType -> new Token(tokenType, matcher.group(tokenType.name()), this.currentLine, this.currentIndex))
+                            .map(token -> this.checkDisabledFeature(token, enabledOptionalFeatures))
                             .map(this::advanceCurrentIndex)
                             .map(this::checkNewLine)
                             .flatMap(this::checkError)
                             .orElseThrow(() -> new SyntaxError(this.currentLine, this.currentIndex)));
         }
         return tokens.stream();
+    }
+
+    private Token checkDisabledFeature(Token token, List<TokenType> enabledOptionalFeatures) {
+        if (disabledOptionalFeatures.contains(token.getType()) && !enabledOptionalFeatures.contains(token.getType()))
+            throw new SyntaxError(this.currentLine, this.currentIndex, token.getData(), "Disabled feature");
+        return token;
     }
 
     public Stream<Token> scan(Stream<Character> characterStream) {

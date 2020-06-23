@@ -3,14 +3,13 @@ package com.austral.ingsis.scope.helpers.resolver;
 import com.austral.ingsis.Expression;
 import com.austral.ingsis.expression.*;
 import com.austral.ingsis.scope.Scope;
-import com.austral.ingsis.scope.helpers.calculator.Calculator;
-import com.austral.ingsis.scope.helpers.calculator.CalculatorImpl;
 import com.austral.ingsis.value.*;
+
+import java.util.Optional;
 
 public class ResolverImpl implements Resolver {
 
 
-    private final Calculator calculator = new CalculatorImpl();
     private final Scope scope;
 
     public ResolverImpl(Scope scope) {
@@ -39,18 +38,38 @@ public class ResolverImpl implements Resolver {
     private Value resolveOperation(Operation operation) {
         Value left = resolve(operation.getLeft());
         Value right = resolve(operation.getRight());
-
-        if (left.isNumber() && right.isNumber()) {
-            return calculator.calculate(left.getAsNumber(), right.getAsNumber(), operation.getOperator());
-        } else if (left.isNumber() && right.isString()) {
-            return calculator.calculate(left.getAsNumber(), right.getAsString(), operation.getOperator());
-
-        } else if (left.isString() && right.isNumber()) {
-            return calculator.calculate(left.getAsString(), right.getAsNumber(), operation.getOperator());
-
-        } else if (left.isString() && right.isString()) {
-            return calculator.calculate(left.getAsString(), right.getAsString(), operation.getOperator());
-        } else throw new RuntimeException("Invalid operation");
+        switch (operation.getOperator()) {
+            case "PLUS":
+                return left.plus(right);
+            case "MINUS":
+                return left.minus(right);
+            case "MULT":
+                return left.multiplied(right);
+            case "DIV":
+                return left.divided(right);
+            case "GRATEREQUAL": {
+                Optional<BooleanValue> grater = left.grater(right).getAsBoolean();
+                Optional<BooleanValue> equal = left.equals(right).getAsBoolean();
+                return new BooleanValue(true,
+                        grater.isPresent() &&
+                                equal.isPresent() &&
+                                (grater.get().getValue() || equal.get().getValue())
+                );
+            }
+            case "GRATER":
+                return left.grater(right);
+            case "LESSEQUAL":
+                Optional<BooleanValue> grater = left.less(right).getAsBoolean();
+                Optional<BooleanValue> equal = left.equals(right).getAsBoolean();
+                return new BooleanValue(true,
+                        grater.isPresent() &&
+                                equal.isPresent() &&
+                                (grater.get().getValue() || equal.get().getValue())
+                );
+            case "LESS":
+                return left.less(right);
+            default: throw new RuntimeException("Invalid operator: " + operation.getOperator());
+        }
     }
 
     @Override

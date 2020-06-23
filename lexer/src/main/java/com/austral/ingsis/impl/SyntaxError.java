@@ -11,6 +11,20 @@ public class SyntaxError extends RuntimeException   {
         this.index = index;
     }
 
+    public SyntaxError(int line, int index, String token) {
+        super(String.format("At  [%d:%d] %s", line, index, token));
+        System.out.println(super.getMessage());
+        this.line = line;
+        this.index = index;
+    }
+
+    public SyntaxError(int line, int index, String token, String message) {
+        super(String.format("At  [%d:%d] %s (%s)", line, index, token, message));
+        System.out.println(super.getMessage());
+        this.line = line;
+        this.index = index;
+    }
+
     public int getIndex() {
         return index;
     }

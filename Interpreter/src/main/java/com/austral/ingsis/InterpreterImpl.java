@@ -82,7 +82,11 @@ public class InterpreterImpl implements Interpreter {
         if (programParser == null)throw new RuntimeException("No program parser");
         Value path = scope.resolve(statement.getPath());
         if (!path.isString()) throw new RuntimeException("Invalid path");
-        String code = fileAsString(path.getAsString().getValue());
+        String code = fileAsString(path
+                .getAsString()
+                .orElseThrow(() -> new RuntimeException("Invalid path"))
+                .getValue()
+        );
         Stream<Statement> statementStream =  this.programParser.parse(code.chars().mapToObj(i -> (char)i));
         scope.append(interpret(statementStream));
     }
@@ -90,7 +94,7 @@ public class InterpreterImpl implements Interpreter {
     private void interpret(Scope scope, If statement) {
         Value condition = scope.resolve(statement.getCondition());
         if (!condition.isBoolean()) throw new RuntimeException("condition should be boolean");
-        if (condition.getAsBoolean().getValue()) {
+        if (condition.getAsBoolean().orElseThrow(() -> new RuntimeException("Condition must be boolean")).getValue()) {
             statement.getInnerStatements().forEach(inner -> this.interpret(scope, inner));
         }
     }

@@ -8,6 +8,8 @@ import com.austral.ingsis.expression.Identifier;
 import com.austral.ingsis.expression.Operation;
 import com.austral.ingsis.matchers.ExpressionMatcher;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,19 +36,27 @@ public class OperationMatcher extends ExpressionMatcher<Operation> {
                 .collect(Collectors.toList());
 
 
+        Optional<Integer> operator = Stream.of(
+                TokenType.PLUS,
+                TokenType.MINUS,
+                TokenType.MULT,
+                TokenType.DIV,
+                TokenType.GRATER,
+                TokenType.LESSEQUAL,
+                TokenType.LESS,
+                TokenType.GRATEREQUAL
+        )
+                .map(tokensTypes::indexOf)
+                .filter(i -> i != -1)
+                .min(Comparator.naturalOrder());
 
-        int plus = tokensTypes.indexOf(TokenType.PLUS);
-        int minus = tokensTypes.indexOf(TokenType.MINUS);
-        int operator = -1;
-        if (plus != -1)operator =plus;
-        if (minus != -1) operator = minus;
-        if (operator == -1) return Optional.empty();
+       if (operator.isEmpty())return Optional.empty();
 
-        Optional<? extends Expression> left = expressionParser.parseExpression(tokens.subList(0, operator));
-        Optional<? extends Expression> right = expressionParser.parseExpression(tokens.subList(operator + 1, tokens.size()));
+        Optional<? extends Expression> left = expressionParser.parseExpression(tokens.subList(0, operator.get()));
+        Optional<? extends Expression> right = expressionParser.parseExpression(tokens.subList(operator.get() + 1, tokens.size()));
 
-        if (left.isPresent() && right.isPresent()){
-            return Optional.of(new Operation(left.get(), right.get(), tokensTypes.get(operator).name()));
+        if (left.isPresent() && right.isPresent()) {
+            return Optional.of(new Operation(left.get(), right.get(), tokensTypes.get(operator.get()).name()));
         }
         return Optional.empty();
     }

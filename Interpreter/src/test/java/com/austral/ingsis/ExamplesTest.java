@@ -4,6 +4,9 @@ package com.austral.ingsis;
 import com.austral.ingsis.impl.LexerImpl;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,11 +15,11 @@ import static org.junit.Assert.assertEquals;
 
 public class ExamplesTest {
 
-    private void test(String code, String expectedOut) {
+    private void test(String code, String expectedOut, List<TokenType> enabledFeatures) {
         Lexer lexer = new LexerImpl();
 
         Stream<Character> characterStream = code.chars().mapToObj(i -> (char) i);
-        Stream<Token> tokenStream = lexer.scan(characterStream);
+        Stream<Token> tokenStream = lexer.scan(characterStream, enabledFeatures);
 
         Parser parser = new ParserImpl();
         Stream<Statement> statements = parser.parse(tokenStream);
@@ -27,6 +30,11 @@ public class ExamplesTest {
         String out = outStream.map(Objects::toString).collect(Collectors.joining());
         assertEquals(expectedOut, out);
     }
+
+    private void test(String code, String expectedOut) {
+        test(code, expectedOut, Collections.emptyList());
+    }
+
     @Test
     public void test001ExampleVariables() {
 
@@ -35,7 +43,7 @@ public class ExamplesTest {
                 let y: string = "Something";
                 let z: string = 'AnotherThing';
                 let a: boolean = true;
-                
+                                
                 print(x);
                 print(y);
                 print(z);
@@ -50,7 +58,14 @@ public class ExamplesTest {
                 true
                 """;
 
-        test(code, expectedOut);
+        test(
+                code,
+                expectedOut,
+                Arrays.asList(
+                        TokenType.TRUELITERAL,
+                        TokenType.BOOLEANTYPE
+                )
+        );
     }
 
     @Test
@@ -73,7 +88,7 @@ public class ExamplesTest {
                 null
                 """;
 
-        test(code, expectedOut);
+        test(code, expectedOut, Arrays.asList(TokenType.BOOLEANTYPE));
     }
 
     @Test
@@ -135,21 +150,56 @@ public class ExamplesTest {
                 Hello
                 """;
 
-        test(code, expectedOut);
+        test(code, expectedOut, Arrays.asList(TokenType.TRUELITERAL, TokenType.FALSELITERAL));
     }
 
     @Test
     public void test006Import() {
 
         String code = """
-               import "/Users/matiasmiodosky/projects/austral/ing/printScript/Interpreter/src/test/resources/test.ts";
-                """;
+                import "/Users/matiasmiodosky/projects/austral/ing/printScript/Interpreter/src/test/resources/test.ts";
+                 """;
 
         String expectedOut = """
                 Hello World!!
                 """;
 
         test(code, expectedOut);
+    }
+
+    @Test
+    public void test007Operations() {
+
+        String code = """
+                print(1 + 1);
+                print(1 + 'a');
+                print('a' + 1);
+                print(1 > 2);
+                print(1 < 2);
+                print(1 >= 2);
+                print(1 <= 2);
+                """;
+
+        String expectedOut = """
+                2
+                1a
+                a1
+                false
+                true
+                false
+                true
+                """;
+
+        test(
+                code,
+                expectedOut,
+                Arrays.asList(
+                        TokenType.GRATER,
+                        TokenType.LESS,
+                        TokenType.GRATEREQUAL,
+                        TokenType.LESSEQUAL
+                )
+        );
     }
 
 }

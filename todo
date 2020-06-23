@@ -1,5 +1,5 @@
-optionals
-    boolean
+optionals [done]
+    boolean ✅
     const
 
 interpreter exceptions

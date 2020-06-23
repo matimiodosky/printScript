@@ -8,15 +8,7 @@ import java.util.stream.Stream;
 public class TokenPatternProvider {
     private  final EnumMap<TokenType, String> patterns = new EnumMap<>(TokenType.class);
 
-    private  final List<TokenType> disabledOptionalFeatures = Arrays.asList(
-            TokenType.BOOLEANTYPE,
-            TokenType.GRATER,
-            TokenType.GRATEREQUAL,
-            TokenType.LESS,
-            TokenType.LESSEQUAL,
-            TokenType.TRUELITERAL,
-            TokenType.FALSELITERAL
-    );
+
 
     public TokenPatternProvider() {
         fill();
@@ -61,11 +53,10 @@ public class TokenPatternProvider {
         patterns.put(TokenType.INVALIDTOKEN, ".+");
     }
 
-    public Stream<TokenType> getValues(List<TokenType> enabledOptionalFeatures) {
+    public Stream<TokenType> getValues() {
         return patterns
                 .keySet()
-                .stream()
-                .filter(type -> !disabledOptionalFeatures.contains(type) || enabledOptionalFeatures.contains(type));
+                .stream();
 
     }
 }
