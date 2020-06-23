@@ -6,7 +6,7 @@ public class ParsignError extends RuntimeException {
     private final int index;
 
     public ParsignError(String message, int line, int index) {
-        super(message);
+        super(message + " at: [" + line + ":" + index + "]");
         this.line = line;
         this.index = index;
     }

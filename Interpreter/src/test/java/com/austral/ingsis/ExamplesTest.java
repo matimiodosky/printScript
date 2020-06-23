@@ -141,9 +141,6 @@ public class ExamplesTest {
                 if(true){
                     print("Hello");
                 }
-                if(false)}
-                    print("World");
-                }
                 """;
 
         String expectedOut = """
@@ -202,38 +199,29 @@ public class ExamplesTest {
         );
     }
 
+
     @Test
-    public void test008InnerIf() {
+    public void test008IfElse() {
 
         String code = """
-                if(true){
-                    print("true");
-                    if(true){
-                        print("true");
-                    }
+                if(false){
+                    print("a");
+                } else {
+                    print("b");
                 }
-                if(true){
-                    print("false");
-                    if(false){
-                        print("false");
-                    }
-                }
-                                
                 """;
 
         String expectedOut = """
-                true
-                true
-                false
+                b
                 """;
 
         test(
                 code,
                 expectedOut,
                 Arrays.asList(
-                        TokenType.TRUELITERAL, TokenType.FALSELITERAL
+                        TokenType.TRUELITERAL,
+                        TokenType.FALSELITERAL
                 )
         );
     }
-
 }

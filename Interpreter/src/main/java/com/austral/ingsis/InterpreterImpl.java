@@ -21,7 +21,6 @@ public class InterpreterImpl implements Interpreter {
         this.programParser = programParser;
     }
 
-
     public InterpreterImpl() {
         this.programParser = null;
     }
@@ -37,11 +36,9 @@ public class InterpreterImpl implements Interpreter {
     private void interpret(Scope scope, Statement statement) {
         if (statement instanceof Print print) {
             interpret(scope, print);
-        }
-        else if (statement instanceof Import imp) {
+        } else if (statement instanceof Import imp) {
             interpret(scope, imp);
-        }
-        else if (statement instanceof VariableExplicitDefinition variableExplicitDefinition) {
+        } else if (statement instanceof VariableExplicitDefinition variableExplicitDefinition) {
             interpret(scope, variableExplicitDefinition);
         } else if (statement instanceof VariableExplicitDefinitionWithNoValue variableDefinitionWithNoValue) {
             interpret(scope, variableDefinitionWithNoValue);
@@ -51,8 +48,11 @@ public class InterpreterImpl implements Interpreter {
             interpret(scope, variableAssignment);
         } else if (statement instanceof If ifstatement) {
             interpret(scope, ifstatement);
+        } else if (statement instanceof IfElse ifElsestatement) {
+            interpret(scope, ifElsestatement);
         } else throw new RuntimeException("Not implemented: " + statement.getClass().getName());
     }
+
 
     private void interpret(Scope scope, Print statement) {
         scope.append(
@@ -79,7 +79,7 @@ public class InterpreterImpl implements Interpreter {
     }
 
     private void interpret(Scope scope, Import statement) {
-        if (programParser == null)throw new RuntimeException("No program parser");
+        if (programParser == null) throw new RuntimeException("No program parser");
         Value path = scope.resolve(statement.getPath());
         if (!path.isString()) throw new RuntimeException("Invalid path");
         String code = fileAsString(path
@@ -87,16 +87,24 @@ public class InterpreterImpl implements Interpreter {
                 .orElseThrow(() -> new RuntimeException("Invalid path"))
                 .getValue()
         );
-        Stream<Statement> statementStream =  this.programParser.parse(code.chars().mapToObj(i -> (char)i));
+        Stream<Statement> statementStream = this.programParser.parse(code.chars().mapToObj(i -> (char) i));
         scope.append(interpret(statementStream));
     }
 
     private void interpret(Scope scope, If statement) {
         Value condition = scope.resolve(statement.getCondition());
-        if (!condition.isBoolean()) throw new RuntimeException("condition should be boolean");
         if (condition.getAsBoolean().orElseThrow(() -> new RuntimeException("Condition must be boolean")).getValue()) {
             statement.getInnerStatements().forEach(inner -> this.interpret(scope, inner));
         }
+    }
+
+    private void interpret(Scope scope, IfElse statement) {
+        if (scope.resolve(statement.getCondition()).getAsBoolean().orElseThrow(() -> new RuntimeException("Condition must be boolean")).getValue()){
+            statement.getIfStatements().forEach(inner -> this.interpret(scope, inner));
+        }else{
+            statement.getElseStatements().forEach(inner -> this.interpret(scope, inner));
+        }
+
     }
 
     private Stream<Character> toStream(Object object) {
@@ -117,7 +125,7 @@ public class InterpreterImpl implements Interpreter {
                 line = buf.readLine();
             }
             return sb.toString();
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Could not read file");
         }
     }

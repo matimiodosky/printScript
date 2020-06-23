@@ -16,14 +16,15 @@ import java.util.stream.Stream;
 public class ParserImpl implements Parser, StatementParser, ExpressionParser {
 
     private final List<StatementMatcher<? extends Statement>> statementMatchers = Arrays.asList(
-            new IfMatcher(this, this),
             new ImportMatcher(this),
             new VariableDefinitionMatcher(this),
             new VariableAssignmentMatcher(this),
             new VariableExplicitDefinitionMatcher(this),
             new VariableExplicitDefinitionWithNoValueMatcher(this),
-            new PrintMatcher(this)
-    );
+            new PrintMatcher(this),
+            new IfElseMatcher(this, this)
+           , new IfMatcher(this, this)
+            );
 
     private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
             new OperationMatcher(this),
@@ -80,7 +81,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
                 .map(matcher -> matcher.match(tokens.stream()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .findAny()
+                .findFirst()
                 .orElseThrow(() -> this.statementError(tokens));
     }
 
