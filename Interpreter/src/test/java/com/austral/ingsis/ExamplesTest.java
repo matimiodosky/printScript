@@ -140,10 +140,10 @@ public class ExamplesTest {
         String code = """
                 if(true){
                     print("Hello");
-                };
+                }
                 if(false)}
                     print("World");
-                };
+                }
                 """;
 
         String expectedOut = """
