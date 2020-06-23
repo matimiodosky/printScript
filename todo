@@ -2,7 +2,6 @@ optionals [done]
     boolean ✅
     const
 
-interpreter exceptions
 fixear el isXXX() ✅
 else
 > < ✅

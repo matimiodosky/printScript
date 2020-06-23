@@ -23,7 +23,7 @@ public class VariableExplicitDefinitionMatcher extends StatementMatcher<Variable
     }
 
     @Override
-    public Optional<VariableExplicitDefinition> match(Stream<Token> tokens) {
+    public Optional<VariableExplicitDefinition> match(Stream<Token> tokens, Token peek) {
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());

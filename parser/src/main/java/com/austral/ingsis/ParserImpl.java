@@ -22,8 +22,8 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
             new VariableExplicitDefinitionMatcher(this),
             new VariableExplicitDefinitionWithNoValueMatcher(this),
             new PrintMatcher(this),
-            new IfElseMatcher(this, this)
-           , new IfMatcher(this, this)
+            new IfElseMatcher(this, this),
+            new IfMatcher(this, this)
             );
 
     private final List<ExpressionMatcher<? extends Expression>> expressionMatchers = Arrays.asList(
@@ -47,7 +47,7 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
         while (statement.isEmpty() && index < tokens.size()){
             acc.add(tokens.get(index));
             index = index + 1;
-            statement = parseStatementToOptional(acc);
+            statement = parseStatementToOptional(acc, index < tokens.size() ? tokens.get(index): null);
             statement.ifPresent(statements::add);
         }
         if (tokens.isEmpty()) return statements.stream();
@@ -66,19 +66,21 @@ public class ParserImpl implements Parser, StatementParser, ExpressionParser {
                 token.getType() != TokenType.NEWLINE;
     }
 
-    private Optional<Statement> parseStatementToOptional(List<Token> token) {
+    private Optional<Statement> parseStatementToOptional(List<Token> token, Token peek) {
         try {
-            return Optional.of(parseStatement(token));
+            return Optional.of(parseStatement(token, peek));
         } catch (Exception e) {
             return Optional.empty();
         }
     }
 
     @Override
-    public Statement parseStatement(List<Token> tokens) {
+    public Statement parseStatement(List<Token> tokens, Token peek) {
         return statementMatchers
                 .stream()
-                .map(matcher -> matcher.match(tokens.stream()))
+                .map(matcher -> {
+                    return matcher.match(tokens.stream(), peek);
+                })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .findFirst()

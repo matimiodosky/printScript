@@ -21,7 +21,7 @@ public class ImportMatcher extends StatementMatcher<Import> {
     }
 
     @Override
-    public Optional<Import> match(Stream<Token> tokens) {
+    public Optional<Import> match(Stream<Token> tokens, Token peek) {
         List<Token> usefulTokens = tokens.filter(super::usefulToken).collect(Collectors.toList());
 
         Optional<Token> keyWord = Optional.of(usefulTokens.get(0)).filter(token -> token.getType() == TokenType.IMPORT);

@@ -23,7 +23,12 @@ public class IfMatcher extends StatementMatcher<If> {
     }
 
     @Override
-    public Optional<If> match(Stream<Token> tokens) {
+    public Optional<If> match(Stream<Token> tokens, Token peek) {
+
+        if (peek != null && TokenType.ELSE.equals(peek.getType())) {
+            return Optional.empty();
+        }
+
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());
@@ -42,6 +47,7 @@ public class IfMatcher extends StatementMatcher<If> {
         Optional<? extends Expression> condition = parser.parseExpression(usefulTokens.subList(2, openBraceIndex - 1));
         Stream<Statement> statementStream = statementParser.parse(usefulTokens.subList(openBraceIndex + 1, closingBraceIndex).stream());
         if (keyWord.isPresent() && openPar.isPresent() && condition.isPresent()){
+
             return Optional.of(new If(
                     usefulTokens.get(0).getLine(),
                     usefulTokens.get(0).getIndex(),

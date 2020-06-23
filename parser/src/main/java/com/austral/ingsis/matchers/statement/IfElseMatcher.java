@@ -23,12 +23,12 @@ public class IfElseMatcher extends StatementMatcher<Statement> {
     }
 
     @Override
-    public Optional<? extends Statement > match(Stream<Token> tokens) {
+    public Optional<? extends Statement > match(Stream<Token> tokens, Token peek) {
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());
+        if (usefulTokens.size() < 9) return Optional.empty();
 
-        if (usefulTokens.size() < 6) return Optional.empty();
         List<TokenType> tokenTypes = usefulTokens.stream().map(Token::getType).collect(Collectors.toList());
 
         Optional<Token> ifKeyword = Optional.of(usefulTokens.get(0)).filter(token -> token.getType().equals(TokenType.IF));
@@ -40,17 +40,19 @@ public class IfElseMatcher extends StatementMatcher<Statement> {
         Optional<Integer> elseIndex = indexOf(tokenTypes, TokenType.ELSE);
 
         if (elseIndex.isEmpty()) {
-            return match(tokens);
+            return Optional.empty();
         }
 
         Optional<Integer> secondOpenBraceIndex = indexOf(tokenTypes.subList(elseIndex.get(), tokenTypes.size()), TokenType.OPENBRACE);
 
         Optional<Integer> secondCloseBrace = indexOf(tokenTypes.subList(elseIndex.get(), tokenTypes.size()), TokenType.CLOSEBRACE);
 
+
+
         if (ifKeyword.isPresent() && openBraceIndex.isPresent() && finalCloseBrace.isPresent() && secondCloseBrace.isPresent() && secondOpenBraceIndex.isPresent()) {
             Optional<? extends Expression> condition = parser.parseExpression(usefulTokens.subList(2, openBraceIndex.get() - 1));
             Stream<Statement> ifStatements = statementParser.parse(usefulTokens.subList(openBraceIndex.get() + 1, elseIndex.get() - 1).stream());
-            Stream<Statement> elseStatements = statementParser.parse(usefulTokens.subList(elseIndex.get() + 2, finalCloseBrace.get()).stream());
+            Stream<Statement> elseStatements = statementParser.parse(usefulTokens.subList(elseIndex.get() + 3, finalCloseBrace.get()).stream());
 
             if (condition.isEmpty()) return Optional.empty();
             return Optional.of(new IfElse(

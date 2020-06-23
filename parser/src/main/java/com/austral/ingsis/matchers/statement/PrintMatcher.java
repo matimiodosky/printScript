@@ -24,7 +24,7 @@ public class PrintMatcher extends StatementMatcher<Print> {
     }
 
     @Override
-    public Optional<Print> match(Stream<Token> tokens) {
+    public Optional<Print> match(Stream<Token> tokens, Token peek) {
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());

@@ -17,7 +17,7 @@ public class VariableAssignmentMatcher extends StatementMatcher<VariableAssignme
     }
 
     @Override
-    public Optional<VariableAssignment> match(Stream<Token> tokens) {
+    public Optional<VariableAssignment> match(Stream<Token> tokens, Token peek) {
         List<Token> usefulTokens = tokens
                 .filter(super::usefulToken)
                 .collect(Collectors.toList());

@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 public abstract class Matcher<T> {
 
-    public abstract Optional<? extends T> match(Stream<Token> tokens);
+    public abstract Optional<? extends T> match(Stream<Token> tokens, Token peek);
 
     protected boolean usefulToken(Token token) {
         return token.getType() != TokenType.WHITESPACE &&

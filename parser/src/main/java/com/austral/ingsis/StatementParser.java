@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface StatementParser {
 
-    Statement parseStatement(List<Token> token);
+    Statement parseStatement(List<Token> token, Token peek);
 
 }
